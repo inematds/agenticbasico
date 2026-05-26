@@ -3,691 +3,235 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Agentic AI — Curso Rápido + Sistema de Gerenciamento</title>
+<title>Agentic AI · Curso + Sistema</title>
+<meta name="description" content="Aprenda agentes de IA agentic em 2 caminhos: visual rápido (v1) ou completo em trilhas (v2). Inclui sistema multi-agente.">
 <script src="https://cdn.tailwindcss.com"></script>
-<script>
-  tailwind.config = {
-    darkMode: 'class',
-    theme: { extend: { colors: { ink: '#0b0f14', panel: '#11161d', line: '#1f2937' } } }
-  }
-</script>
+<script>tailwind.config = { darkMode:'class', theme:{ extend:{ colors:{ ink:'#0b0f14', panel:'#11161d', line:'#1f2937' } } } }</script>
 <style>
-  html { scroll-behavior: smooth; }
   body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-  .glow { box-shadow: 0 0 0 1px rgba(250,204,21,.15), 0 10px 40px -10px rgba(250,204,21,.25); }
-  .chip { display:inline-flex; align-items:center; gap:.35rem; padding:.2rem .6rem; border-radius:999px; font-size:.75rem; font-weight:600; }
-  .pulse-dot { width:.5rem; height:.5rem; border-radius:999px; background:#22c55e; box-shadow:0 0 0 0 rgba(34,197,94,.7); animation: pulse 1.5s infinite; }
-  @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(34,197,94,.7)} 70%{box-shadow:0 0 0 10px rgba(34,197,94,0)} 100%{box-shadow:0 0 0 0 rgba(34,197,94,0)} }
   .grid-bg {
     background-image:
-      radial-gradient(circle at 20% 10%, rgba(250,204,21,.08), transparent 40%),
-      radial-gradient(circle at 80% 30%, rgba(56,189,248,.08), transparent 40%),
-      linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
-    background-size: auto, auto, 36px 36px, 36px 36px;
+      radial-gradient(circle at 15% 25%, rgba(250,204,21,.10), transparent 45%),
+      radial-gradient(circle at 85% 35%, rgba(56,189,248,.10), transparent 45%),
+      radial-gradient(circle at 50% 90%, rgba(168,85,247,.08), transparent 45%),
+      linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size: auto, auto, auto, 42px 42px, 42px 42px;
   }
-  .typing::after { content:'▍'; animation: blink 1s infinite; color:#facc15; }
-  @keyframes blink { 50% { opacity: 0 } }
-  .scroll-fade { mask-image: linear-gradient(to bottom, transparent, black 8%, black 92%, transparent); }
-  details > summary { list-style: none; cursor: pointer; }
-  details > summary::-webkit-details-marker { display:none; }
-  .step-line { background: linear-gradient(180deg, #facc15, transparent); }
+  .chip { display:inline-flex; align-items:center; gap:.4rem; padding:.25rem .7rem; border-radius:999px; font-size:.72rem; font-weight:600; }
+  .dot { width:.5rem; height:.5rem; border-radius:999px; background:#22c55e; box-shadow:0 0 0 0 rgba(34,197,94,.7); animation: pulse 1.6s infinite; }
+  @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(34,197,94,.7)} 70%{box-shadow:0 0 0 10px rgba(34,197,94,0)} 100%{box-shadow:0 0 0 0 rgba(34,197,94,0)} }
+  .lift { transition: transform .25s, border-color .25s, box-shadow .25s; }
+  .lift:hover { transform: translateY(-6px); border-color: rgba(250,204,21,.5); box-shadow: 0 30px 70px -25px rgba(250,204,21,.35); }
+  .glow-y { box-shadow: 0 0 0 1px rgba(250,204,21,.15), 0 30px 80px -30px rgba(250,204,21,.4); }
+  .glow-s { box-shadow: 0 0 0 1px rgba(56,189,248,.15), 0 30px 80px -30px rgba(56,189,248,.4); }
+  .pill { font-family: ui-monospace, "JetBrains Mono", monospace; }
 </style>
 </head>
 <body class="bg-ink text-gray-100 dark">
 
-<!-- ============ NAV ============ -->
+<!-- NAV -->
 <nav class="sticky top-0 z-40 backdrop-blur bg-ink/80 border-b border-line">
-  <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
-    <a href="#top" class="flex items-center gap-2 font-bold">
+  <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between gap-4">
+    <a href="./" class="flex items-center gap-2 font-bold shrink-0">
       <span class="w-8 h-8 rounded-lg bg-yellow-400 text-black grid place-items-center">A</span>
-      <span>Agentic<span class="text-yellow-400">.</span>Curso</span>
+      Agentic<span class="text-yellow-400">.</span>basico
     </a>
-    <div class="hidden md:flex items-center gap-1 text-sm">
-      <a href="#anatomia" class="px-3 py-2 rounded hover:bg-white/5">Anatomia</a>
-      <a href="#pilares" class="px-3 py-2 rounded hover:bg-white/5">5 Pilares</a>
-      <a href="#fluxo" class="px-3 py-2 rounded hover:bg-white/5">Fluxo</a>
-      <a href="#demo" class="px-3 py-2 rounded hover:bg-white/5">Demo</a>
-      <a href="#construir" class="px-3 py-2 rounded hover:bg-white/5">Construir</a>
-      <a href="#sistema" class="px-3 py-2 rounded bg-yellow-400 text-black font-semibold hover:bg-yellow-300">Sistema →</a>
+    <div class="flex items-center gap-1 text-sm flex-wrap justify-end">
+      <a href="v1/index.html" class="px-3 py-2 rounded hover:bg-white/5">v1 · visual</a>
+      <a href="v2/index.html" class="px-3 py-2 rounded hover:bg-white/5">v2 · completo</a>
+      <a href="v2/sistema.html" class="px-3 py-2 rounded bg-yellow-400 text-black font-semibold hover:bg-yellow-300">Sistema →</a>
+      <a href="https://inema.club" target="_blank" rel="noopener" class="px-3 py-2 rounded text-sky-400 hover:bg-sky-400/10">INEMA.CLUB ↗</a>
     </div>
   </div>
 </nav>
 
-<!-- ============ HERO ============ -->
-<header id="top" class="grid-bg border-b border-line">
-  <div class="max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-10 items-center">
-    <div>
-      <span class="chip bg-yellow-400/10 text-yellow-400 border border-yellow-400/30">
-        <span class="pulse-dot"></span> Curso rápido · 15 minutos
-      </span>
-      <h1 class="mt-4 text-4xl md:text-5xl font-bold leading-tight">
-        Conheça seu novo <span class="text-yellow-400">agente de IA</span>.<br>
-        Ele não só responde — <span class="underline decoration-yellow-400/60">ele age</span>.
-      </h1>
-      <p class="mt-5 text-gray-400 text-lg">
-        Aprenda a anatomia de um agente agentic em 5 peças, veja um caso real
-        (imobiliário) ponta a ponta, e use o sistema embutido para criar e
-        gerenciar seus próprios agentes.
-      </p>
-      <div class="mt-7 flex gap-3">
-        <a href="#anatomia" class="px-5 py-3 rounded-lg bg-yellow-400 text-black font-semibold hover:bg-yellow-300">Começar curso</a>
-        <a href="#sistema" class="px-5 py-3 rounded-lg border border-line hover:bg-white/5">Abrir sistema</a>
-      </div>
-      <div class="mt-8 flex gap-6 text-sm text-gray-500">
-        <div><span class="text-white font-bold">5</span> pilares</div>
-        <div><span class="text-white font-bold">1</span> demo interativa</div>
-        <div><span class="text-white font-bold">∞</span> agentes que você cria</div>
-      </div>
+<!-- HERO -->
+<header class="grid-bg border-b border-line">
+  <div class="max-w-6xl mx-auto px-6 py-24 text-center">
+    <span class="chip bg-yellow-400/10 text-yellow-400 border border-yellow-400/30">
+      <span class="dot"></span> curso aberto · grátis · roda no navegador
+    </span>
+    <h1 class="mt-6 text-4xl md:text-6xl font-bold leading-tight max-w-4xl mx-auto">
+      Aprenda <span class="text-yellow-400">agentes de IA</span> em <span class="underline decoration-yellow-400/60">2 caminhos</span>.<br>
+      Construa os seus <span class="text-sky-400">em paralelo</span>.
+    </h1>
+    <p class="mt-6 text-gray-400 text-lg max-w-2xl mx-auto">
+      Escolha entre uma landing visual rápida ou o curso completo em trilhas.
+      Depois, abra o sistema e rode vários agentes ao mesmo tempo, lado a lado.
+    </p>
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <a href="#caminhos" class="px-6 py-3 rounded-lg bg-yellow-400 text-black font-semibold hover:bg-yellow-300">Escolher caminho</a>
+      <a href="v2/sistema.html" class="px-6 py-3 rounded-lg border border-line hover:bg-white/5">⚡ Pular pro sistema</a>
     </div>
 
-    <!-- Robot card -->
-    <div class="relative">
-      <div class="absolute -inset-4 bg-gradient-to-br from-yellow-400/20 to-sky-400/10 rounded-3xl blur-2xl"></div>
-      <div class="relative bg-panel border border-line rounded-2xl p-6 glow">
-        <div class="flex items-center justify-between text-xs text-gray-500 mb-4">
-          <span class="flex items-center gap-2"><span class="pulse-dot"></span> agent.online</span>
-          <span>model: gpt-4o · ctx: 8k</span>
-        </div>
-        <div class="text-center py-6">
-          <div class="text-6xl mb-2">🤖</div>
-          <div class="font-bold text-lg">Agente Imobiliário</div>
-          <div class="text-xs text-gray-500">5 ferramentas · 12 FAQs · 8 propriedades</div>
-        </div>
-        <div class="grid grid-cols-5 gap-2 mt-4">
-          <div title="Instruções"   class="aspect-square rounded-lg bg-yellow-400/10 border border-yellow-400/30 grid place-items-center text-xl">📝</div>
-          <div title="Conhecimento" class="aspect-square rounded-lg bg-sky-400/10    border border-sky-400/30 grid place-items-center text-xl">📚</div>
-          <div title="Ferramentas"  class="aspect-square rounded-lg bg-emerald-400/10 border border-emerald-400/30 grid place-items-center text-xl">🛠️</div>
-          <div title="Intents"      class="aspect-square rounded-lg bg-rose-400/10   border border-rose-400/30 grid place-items-center text-xl">🎯</div>
-          <div title="Config"       class="aspect-square rounded-lg bg-purple-400/10 border border-purple-400/30 grid place-items-center text-xl">⚙️</div>
-        </div>
-        <div class="mt-4 text-center text-[11px] text-gray-500">os 5 componentes do cérebro</div>
-      </div>
+    <!-- stats -->
+    <div class="mt-14 grid grid-cols-3 md:grid-cols-4 gap-4 max-w-3xl mx-auto text-sm">
+      <div class="bg-panel/60 border border-line rounded-xl p-4"><div class="text-2xl font-bold text-yellow-400">2</div><div class="text-gray-500">caminhos</div></div>
+      <div class="bg-panel/60 border border-line rounded-xl p-4"><div class="text-2xl font-bold text-sky-400">9</div><div class="text-gray-500">módulos</div></div>
+      <div class="bg-panel/60 border border-line rounded-xl p-4"><div class="text-2xl font-bold text-emerald-400">4</div><div class="text-gray-500">agentes em paralelo</div></div>
+      <div class="hidden md:block bg-panel/60 border border-line rounded-xl p-4"><div class="text-2xl font-bold text-purple-400">∞</div><div class="text-gray-500">agentes seus</div></div>
     </div>
   </div>
 </header>
 
-<!-- ============ ANATOMIA ============ -->
-<section id="anatomia" class="py-20 border-b border-line">
+<!-- CAMINHOS -->
+<section id="caminhos" class="py-20 border-b border-line">
   <div class="max-w-7xl mx-auto px-6">
     <div class="text-center mb-12">
-      <span class="chip bg-white/5 text-gray-400 border border-line">aula 01</span>
-      <h2 class="mt-3 text-3xl md:text-4xl font-bold">Anatomia de um Agente</h2>
-      <p class="text-gray-400 mt-2">Por dentro do "cérebro" existem 5 peças. Cada uma faz uma coisa.</p>
+      <span class="chip bg-white/5 text-gray-400 border border-line">escolha</span>
+      <h2 class="mt-3 text-3xl md:text-4xl font-bold">v1 ou v2? Pegue o que combina com você agora.</h2>
+      <p class="text-gray-400 mt-2">Pode fazer os dois — começa visual, aprofunda depois.</p>
     </div>
 
-    <!-- Diagrama visual: hub + spokes -->
-    <div class="relative max-w-3xl mx-auto aspect-square">
-      <!-- centro -->
-      <div class="absolute inset-1/3 rounded-full bg-gradient-to-br from-yellow-400 to-amber-600 grid place-items-center shadow-2xl">
-        <div class="text-center text-black">
-          <div class="text-4xl">🧠</div>
-          <div class="font-bold mt-1">AGENTE</div>
+    <div class="grid md:grid-cols-2 gap-6">
+      <!-- V1 -->
+      <a href="v1/index.html" class="lift block bg-panel border border-line rounded-2xl p-8 glow-y">
+        <div class="flex items-start justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-14 h-14 rounded-xl bg-yellow-400/15 grid place-items-center text-3xl">⚡</div>
+            <div>
+              <div class="text-xs text-gray-500 pill">v1</div>
+              <div class="font-bold text-2xl">Visual Rápido</div>
+            </div>
+          </div>
+          <span class="chip bg-yellow-400/10 text-yellow-400 border border-yellow-400/30">~15 min</span>
         </div>
-      </div>
-      <!-- conexões SVG -->
-      <svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 400 400">
-        <g stroke="#facc15" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4" fill="none">
-          <line x1="200" y1="200" x2="200" y2="40"/>
-          <line x1="200" y1="200" x2="360" y2="120"/>
-          <line x1="200" y1="200" x2="320" y2="320"/>
-          <line x1="200" y1="200" x2="80"  y2="320"/>
-          <line x1="200" y1="200" x2="40"  y2="120"/>
-        </g>
-      </svg>
-      <!-- nodes -->
-      <div class="absolute left-1/2 -translate-x-1/2 top-0 w-32 text-center">
-        <div class="bg-panel border border-yellow-400/40 rounded-xl p-3"><div class="text-2xl">📝</div><div class="text-xs mt-1 font-semibold">Instruções</div></div>
-      </div>
-      <div class="absolute right-0 top-1/4 w-32 text-center">
-        <div class="bg-panel border border-sky-400/40 rounded-xl p-3"><div class="text-2xl">📚</div><div class="text-xs mt-1 font-semibold">Conhecimento</div></div>
-      </div>
-      <div class="absolute right-4 bottom-4 w-32 text-center">
-        <div class="bg-panel border border-emerald-400/40 rounded-xl p-3"><div class="text-2xl">🛠️</div><div class="text-xs mt-1 font-semibold">Ferramentas</div></div>
-      </div>
-      <div class="absolute left-4 bottom-4 w-32 text-center">
-        <div class="bg-panel border border-rose-400/40 rounded-xl p-3"><div class="text-2xl">🎯</div><div class="text-xs mt-1 font-semibold">Intents</div></div>
-      </div>
-      <div class="absolute left-0 top-1/4 w-32 text-center">
-        <div class="bg-panel border border-purple-400/40 rounded-xl p-3"><div class="text-2xl">⚙️</div><div class="text-xs mt-1 font-semibold">Settings</div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 5 PILARES ============ -->
-<section id="pilares" class="py-20 border-b border-line bg-panel/40">
-  <div class="max-w-7xl mx-auto px-6">
-    <div class="text-center mb-12">
-      <span class="chip bg-white/5 text-gray-400 border border-line">aula 02</span>
-      <h2 class="mt-3 text-3xl md:text-4xl font-bold">Os 5 Pilares, em detalhe</h2>
-      <p class="text-gray-400 mt-2">Cada card abre com um exemplo visual.</p>
-    </div>
-
-    <div class="grid md:grid-cols-2 gap-5">
-      <!-- 1 INSTRUÇÕES -->
-      <div class="bg-panel border border-yellow-400/30 rounded-2xl p-6">
-        <div class="flex items-center gap-3 mb-3">
-          <div class="w-10 h-10 rounded-lg bg-yellow-400/15 grid place-items-center text-yellow-400 font-bold">1</div>
-          <div><div class="font-bold">📝 Instruções</div><div class="text-xs text-gray-500">o "system prompt" — personalidade, tom, regras</div></div>
-        </div>
-        <div class="bg-black/40 rounded-lg p-3 text-xs font-mono text-gray-300 border border-line">
-          <span class="text-yellow-400">[SYSTEM]</span> Você é <b>Aura</b>, consultora imobiliária da L&T.<br>
-          Tom: cordial, direto, nunca insistente.<br>
-          Regras: sempre confirmar cidade antes de listar imóveis.<br>
-          Nunca invente endereços; use a base de propriedades.
-        </div>
-        <div class="text-xs text-gray-500 mt-2">💾 auto-salva enquanto digita</div>
-      </div>
-
-      <!-- 2 CONHECIMENTO -->
-      <div class="bg-panel border border-sky-400/30 rounded-2xl p-6">
-        <div class="flex items-center gap-3 mb-3">
-          <div class="w-10 h-10 rounded-lg bg-sky-400/15 grid place-items-center text-sky-400 font-bold">2</div>
-          <div><div class="font-bold">📚 Conhecimento</div><div class="text-xs text-gray-500">de onde o bot tira as respostas</div></div>
-        </div>
-        <div class="grid grid-cols-2 gap-2 text-xs">
-          <div class="border border-line rounded-lg p-3 bg-black/30"><div class="text-sky-400 font-semibold">📄 FAQ.pdf</div><div class="text-gray-500">142 perguntas</div></div>
-          <div class="border border-line rounded-lg p-3 bg-black/30"><div class="text-sky-400 font-semibold">🔗 site.com</div><div class="text-gray-500">crawl semanal</div></div>
-          <div class="border border-line rounded-lg p-3 bg-black/30"><div class="text-sky-400 font-semibold">🏢 imoveis.csv</div><div class="text-gray-500">87 unidades</div></div>
-          <div class="border border-line rounded-lg p-3 bg-black/30"><div class="text-sky-400 font-semibold">📝 notion</div><div class="text-gray-500">políticas</div></div>
-        </div>
-      </div>
-
-      <!-- 3 FERRAMENTAS -->
-      <div class="bg-panel border border-emerald-400/30 rounded-2xl p-6">
-        <div class="flex items-center gap-3 mb-3">
-          <div class="w-10 h-10 rounded-lg bg-emerald-400/15 grid place-items-center text-emerald-400 font-bold">3</div>
-          <div><div class="font-bold">🛠️ Ferramentas</div><div class="text-xs text-gray-500">o que o bot faz, não só fala</div></div>
-        </div>
-        <ul class="space-y-2 text-sm">
-          <li class="flex items-center gap-2"><span class="text-emerald-400">▸</span> <code class="text-xs bg-black/40 px-2 py-0.5 rounded">buscar_imoveis(cidade, max)</code></li>
-          <li class="flex items-center gap-2"><span class="text-emerald-400">▸</span> <code class="text-xs bg-black/40 px-2 py-0.5 rounded">slots_visita(imovel, data)</code></li>
-          <li class="flex items-center gap-2"><span class="text-emerald-400">▸</span> <code class="text-xs bg-black/40 px-2 py-0.5 rounded">agendar(slot, nome, n_pessoas)</code></li>
-          <li class="flex items-center gap-2"><span class="text-emerald-400">▸</span> <code class="text-xs bg-black/40 px-2 py-0.5 rounded">enviar_whatsapp(numero, msg)</code></li>
+        <p class="text-gray-400 mt-5">
+          Uma única página rolável com diagrama dos 5 pilares, demo interativa
+          de chat imobiliário e a receita de 6 passos.
+        </p>
+        <ul class="mt-5 space-y-2 text-sm text-gray-300">
+          <li class="flex gap-2"><span class="text-yellow-400">▸</span> Hub-and-spoke dos 5 componentes</li>
+          <li class="flex gap-2"><span class="text-yellow-400">▸</span> Demo do bot com botão "▶ próxima fala"</li>
+          <li class="flex gap-2"><span class="text-yellow-400">▸</span> Painel "🧠 por trás da cortina"</li>
+          <li class="flex gap-2"><span class="text-yellow-400">▸</span> Receita de 6 passos em timeline</li>
         </ul>
-      </div>
+        <div class="mt-6 flex items-center justify-between">
+          <span class="text-yellow-400 font-semibold text-sm">Abrir v1 →</span>
+          <span class="text-xs text-gray-500">ideal pra quem nunca viu</span>
+        </div>
+      </a>
 
-      <!-- 4 INTENTS -->
-      <div class="bg-panel border border-rose-400/30 rounded-2xl p-6">
-        <div class="flex items-center gap-3 mb-3">
-          <div class="w-10 h-10 rounded-lg bg-rose-400/15 grid place-items-center text-rose-400 font-bold">4</div>
-          <div><div class="font-bold">🎯 Intents não resolvidos</div><div class="text-xs text-gray-500">tudo que o bot não soube tratar fica logado</div></div>
+      <!-- V2 -->
+      <a href="v2/index.html" class="lift block bg-panel border border-line rounded-2xl p-8 glow-s">
+        <div class="flex items-start justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-14 h-14 rounded-xl bg-sky-400/15 grid place-items-center text-3xl">📚</div>
+            <div>
+              <div class="text-xs text-gray-500 pill">v2</div>
+              <div class="font-bold text-2xl">Curso Completo</div>
+            </div>
+          </div>
+          <span class="chip bg-sky-400/10 text-sky-400 border border-sky-400/30">~3h · 9 módulos</span>
         </div>
-        <table class="w-full text-xs">
-          <tr class="border-b border-line"><td class="py-1">"posso pagar em cripto?"</td><td class="text-rose-400 text-right">3x</td></tr>
-          <tr class="border-b border-line"><td class="py-1">"financia 100%?"</td><td class="text-rose-400 text-right">7x</td></tr>
-          <tr><td class="py-1">"tem garagem dupla?"</td><td class="text-rose-400 text-right">2x</td></tr>
-        </table>
-        <div class="text-xs text-gray-500 mt-2">→ vire FAQ, ferramenta, ou regra de instrução.</div>
-      </div>
+        <p class="text-gray-400 mt-5">
+          Hub que reúne o curso INEMA em 3 trilhas (Anatomia, Construção, Operação)
+          + sistema multi-agente pra rodar vários ao mesmo tempo.
+        </p>
+        <ul class="mt-5 space-y-2 text-sm text-gray-300">
+          <li class="flex gap-2"><span class="text-sky-400">▸</span> 3 trilhas · 9 módulos · light/dark mode</li>
+          <li class="flex gap-2"><span class="text-sky-400">▸</span> Arena: 2-4 agentes em paralelo</li>
+          <li class="flex gap-2"><span class="text-sky-400">▸</span> Modo orquestração (pipeline encadeado)</li>
+          <li class="flex gap-2"><span class="text-sky-400">▸</span> CRUD, export/import JSON, atalhos</li>
+        </ul>
+        <div class="mt-6 flex items-center justify-between">
+          <span class="text-sky-400 font-semibold text-sm">Abrir v2 →</span>
+          <span class="text-xs text-gray-500">ideal pra estudar a fundo</span>
+        </div>
+      </a>
+    </div>
 
-      <!-- 5 SETTINGS -->
-      <div class="bg-panel border border-purple-400/30 rounded-2xl p-6 md:col-span-2">
-        <div class="flex items-center gap-3 mb-3">
-          <div class="w-10 h-10 rounded-lg bg-purple-400/15 grid place-items-center text-purple-400 font-bold">5</div>
-          <div><div class="font-bold">⚙️ Settings</div><div class="text-xs text-gray-500">modelo, contexto, custo, custom fields</div></div>
-        </div>
-        <div class="grid md:grid-cols-4 gap-3 text-xs">
-          <div class="bg-black/30 border border-line rounded-lg p-3"><div class="text-purple-400 font-semibold">Modelo</div><div class="text-gray-300 mt-1">gpt-4o-mini</div></div>
-          <div class="bg-black/30 border border-line rounded-lg p-3"><div class="text-purple-400 font-semibold">Contexto</div><div class="text-gray-300 mt-1">últimas 20 msgs</div></div>
-          <div class="bg-black/30 border border-line rounded-lg p-3"><div class="text-purple-400 font-semibold">Custo limite</div><div class="text-gray-300 mt-1">R$ 0,12 / chat</div></div>
-          <div class="bg-black/30 border border-line rounded-lg p-3"><div class="text-purple-400 font-semibold">Custom fields</div><div class="text-gray-300 mt-1">nome, cidade, lead_score</div></div>
-        </div>
-        <div class="text-xs text-gray-500 mt-3">💡 <b>Custom fields</b> são fatos sobre o cliente que entram direto no prompt: <code class="bg-black/40 px-1.5 py-0.5 rounded">"O cliente é {{nome}}, mora em {{cidade}}, score {{lead_score}}"</code>.</div>
+    <!-- Comparação -->
+    <div class="mt-10 bg-panel/40 border border-line rounded-2xl overflow-hidden">
+      <div class="grid grid-cols-3 text-sm">
+        <div class="p-4 font-bold border-r border-line">Comparação</div>
+        <div class="p-4 font-bold text-yellow-400 border-r border-line text-center">v1 · Visual</div>
+        <div class="p-4 font-bold text-sky-400 text-center">v2 · Completo</div>
+
+        <div class="p-4 border-t border-r border-line text-gray-400">Tempo</div>
+        <div class="p-4 border-t border-r border-line text-center">~15 min</div>
+        <div class="p-4 border-t border-line text-center">~3 h</div>
+
+        <div class="p-4 border-t border-r border-line text-gray-400">Formato</div>
+        <div class="p-4 border-t border-r border-line text-center">página única</div>
+        <div class="p-4 border-t border-line text-center">3 trilhas · 9 módulos</div>
+
+        <div class="p-4 border-t border-r border-line text-gray-400">Demo do bot</div>
+        <div class="p-4 border-t border-r border-line text-center">✓ interativa</div>
+        <div class="p-4 border-t border-line text-center">✓ + caso real ponta a ponta</div>
+
+        <div class="p-4 border-t border-r border-line text-gray-400">Sistema</div>
+        <div class="p-4 border-t border-r border-line text-center">CRUD simples</div>
+        <div class="p-4 border-t border-line text-center">arena multi-agente + orquestração</div>
+
+        <div class="p-4 border-t border-r border-line text-gray-400">Light mode</div>
+        <div class="p-4 border-t border-r border-line text-center text-gray-500">só dark</div>
+        <div class="p-4 border-t border-line text-center">✓ toggle</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============ FLUXO ============ -->
-<section id="fluxo" class="py-20 border-b border-line">
+<!-- O QUE VOCÊ APRENDE -->
+<section class="py-20 border-b border-line bg-panel/40">
   <div class="max-w-7xl mx-auto px-6">
     <div class="text-center mb-12">
-      <span class="chip bg-white/5 text-gray-400 border border-line">aula 03</span>
-      <h2 class="mt-3 text-3xl md:text-4xl font-bold">Como o agente pensa numa volta</h2>
-      <p class="text-gray-400 mt-2">Loop ReAct simplificado: ouvir → pensar → escolher tool → agir → responder.</p>
+      <span class="chip bg-white/5 text-gray-400 border border-line">os 5 pilares</span>
+      <h2 class="mt-3 text-3xl md:text-4xl font-bold">O que você aprende nos dois caminhos</h2>
     </div>
     <div class="grid md:grid-cols-5 gap-4">
-      <div class="bg-panel border border-line rounded-xl p-4 text-center"><div class="text-3xl">👂</div><div class="font-bold mt-2">1. Ouve</div><div class="text-xs text-gray-500 mt-1">mensagem do cliente</div></div>
-      <div class="bg-panel border border-line rounded-xl p-4 text-center"><div class="text-3xl">🧠</div><div class="font-bold mt-2">2. Pensa</div><div class="text-xs text-gray-500 mt-1">prompt + memória + contexto</div></div>
-      <div class="bg-panel border border-line rounded-xl p-4 text-center"><div class="text-3xl">🛠️</div><div class="font-bold mt-2">3. Escolhe tool</div><div class="text-xs text-gray-500 mt-1">ou responde direto</div></div>
-      <div class="bg-panel border border-line rounded-xl p-4 text-center"><div class="text-3xl">⚡</div><div class="font-bold mt-2">4. Executa</div><div class="text-xs text-gray-500 mt-1">API real (CRM, agenda)</div></div>
-      <div class="bg-panel border border-line rounded-xl p-4 text-center"><div class="text-3xl">💬</div><div class="font-bold mt-2">5. Responde</div><div class="text-xs text-gray-500 mt-1">com o resultado</div></div>
+      <div class="bg-panel border border-yellow-400/30 rounded-xl p-5 text-center"><div class="text-3xl">📝</div><div class="font-bold mt-3">Instruções</div><div class="text-xs text-gray-500 mt-1">system prompt, tom, regras</div></div>
+      <div class="bg-panel border border-sky-400/30 rounded-xl p-5 text-center"><div class="text-3xl">📚</div><div class="font-bold mt-3">Conhecimento</div><div class="text-xs text-gray-500 mt-1">FAQs, sites, CSVs</div></div>
+      <div class="bg-panel border border-emerald-400/30 rounded-xl p-5 text-center"><div class="text-3xl">🛠️</div><div class="font-bold mt-3">Ferramentas</div><div class="text-xs text-gray-500 mt-1">funções que o bot executa</div></div>
+      <div class="bg-panel border border-rose-400/30 rounded-xl p-5 text-center"><div class="text-3xl">🎯</div><div class="font-bold mt-3">Intents</div><div class="text-xs text-gray-500 mt-1">o que o bot ainda não trata</div></div>
+      <div class="bg-panel border border-purple-400/30 rounded-xl p-5 text-center"><div class="text-3xl">⚙️</div><div class="font-bold mt-3">Settings</div><div class="text-xs text-gray-500 mt-1">modelo, custo, custom fields</div></div>
     </div>
   </div>
 </section>
 
-<!-- ============ DEMO ============ -->
-<section id="demo" class="py-20 border-b border-line bg-panel/40">
-  <div class="max-w-7xl mx-auto px-6">
-    <div class="text-center mb-10">
-      <span class="chip bg-white/5 text-gray-400 border border-line">aula 04 · interativa</span>
-      <h2 class="mt-3 text-3xl md:text-4xl font-bold">Demo: agente imobiliário</h2>
-      <p class="text-gray-400 mt-2">Clique em "▶ Próxima fala" e veja o agente decidir, chamar ferramenta, responder.</p>
-    </div>
-
-    <div class="grid lg:grid-cols-3 gap-6">
-      <!-- Chat -->
-      <div class="lg:col-span-2 bg-[#0f1419] border border-line rounded-2xl flex flex-col h-[600px]">
-        <div class="flex items-center justify-between px-4 py-3 border-b border-line">
-          <div class="flex items-center gap-2"><span class="pulse-dot"></span> <span class="font-bold">Aura · L&T Imóveis</span></div>
-          <button onclick="resetDemo()" class="text-xs text-gray-400 hover:text-white">↻ reiniciar</button>
-        </div>
-        <div id="chat" class="flex-1 overflow-y-auto p-4 space-y-3 scroll-fade"></div>
-        <div class="border-t border-line p-3 flex gap-2">
-          <button onclick="nextDemo()" id="next-btn" class="flex-1 px-4 py-2.5 bg-yellow-400 text-black font-semibold rounded-lg hover:bg-yellow-300">▶ Próxima fala</button>
-          <button onclick="autoDemo()" class="px-4 py-2.5 border border-line rounded-lg hover:bg-white/5 text-sm">⏩ auto</button>
+<!-- SISTEMA CTA -->
+<section class="py-20 border-b border-line">
+  <div class="max-w-5xl mx-auto px-6">
+    <a href="v2/sistema.html" class="lift block bg-gradient-to-br from-panel to-black border border-yellow-400/30 rounded-2xl p-10 glow-y">
+      <div class="flex items-center gap-3 mb-5">
+        <div class="w-14 h-14 rounded-xl bg-yellow-400 text-black grid place-items-center text-3xl">🤖</div>
+        <div>
+          <div class="text-xs text-gray-500 pill">aplicação prática</div>
+          <div class="font-bold text-2xl">Sistema · Arena Multi-Agente</div>
         </div>
       </div>
-
-      <!-- Painel de raciocínio -->
-      <div class="bg-panel border border-line rounded-2xl p-4 h-[600px] flex flex-col">
-        <div class="font-bold mb-3 flex items-center gap-2">🧠 Por trás da cortina</div>
-        <div id="think" class="flex-1 overflow-y-auto space-y-3 text-xs"></div>
+      <p class="text-gray-400 mb-5">
+        Cadastre quantos agentes quiser, selecione 2 a 4 e dispare a mesma pergunta
+        pra todos ao mesmo tempo. Compare respostas, tempo e custo lado a lado.
+        Ou ative o modo orquestração pra encadear em pipeline.
+      </p>
+      <div class="flex flex-wrap gap-2 text-[11px]">
+        <span class="chip bg-yellow-400/10 text-yellow-400 border border-yellow-400/30">▶ paralelo</span>
+        <span class="chip bg-sky-400/10 text-sky-400 border border-sky-400/30">→ orquestração</span>
+        <span class="chip bg-emerald-400/10 text-emerald-400 border border-emerald-400/30">💾 localStorage</span>
+        <span class="chip bg-purple-400/10 text-purple-400 border border-purple-400/30">⬇ export JSON</span>
+        <span class="chip bg-rose-400/10 text-rose-400 border border-rose-400/30">⌘+↵ atalhos</span>
       </div>
-    </div>
+      <div class="mt-6 text-yellow-400 font-semibold">Entrar na arena →</div>
+    </a>
   </div>
 </section>
 
-<!-- ============ CONSTRUIR ============ -->
-<section id="construir" class="py-20 border-b border-line">
+<!-- FOOTER -->
+<footer class="border-t border-line py-10 text-center text-xs text-gray-500">
   <div class="max-w-7xl mx-auto px-6">
-    <div class="text-center mb-12">
-      <span class="chip bg-white/5 text-gray-400 border border-line">aula 05</span>
-      <h2 class="mt-3 text-3xl md:text-4xl font-bold">Receita para construir o seu</h2>
-      <p class="text-gray-400 mt-2">6 passos. Em ordem.</p>
-    </div>
-    <div class="relative max-w-3xl mx-auto">
-      <div class="absolute left-6 top-2 bottom-2 w-px step-line"></div>
-      <ol class="space-y-6">
-        <li class="pl-16 relative"><div class="absolute left-0 w-12 h-12 rounded-full bg-yellow-400 text-black grid place-items-center font-bold">1</div><div class="font-bold">Defina o objetivo único</div><div class="text-gray-400 text-sm">"Agendar visita a imóvel" é melhor que "ajudar com tudo".</div></li>
-        <li class="pl-16 relative"><div class="absolute left-0 w-12 h-12 rounded-full bg-yellow-400 text-black grid place-items-center font-bold">2</div><div class="font-bold">Escreva instruções curtas e específicas</div><div class="text-gray-400 text-sm">Tom + regras de ouro + o que NUNCA fazer.</div></li>
-        <li class="pl-16 relative"><div class="absolute left-0 w-12 h-12 rounded-full bg-yellow-400 text-black grid place-items-center font-bold">3</div><div class="font-bold">Plugue conhecimento confiável</div><div class="text-gray-400 text-sm">Comece com 1 FAQ + 1 fonte estruturada (CSV/DB).</div></li>
-        <li class="pl-16 relative"><div class="absolute left-0 w-12 h-12 rounded-full bg-yellow-400 text-black grid place-items-center font-bold">4</div><div class="font-bold">Liste no máximo 5 ferramentas</div><div class="text-gray-400 text-sm">Cada tool com nome verbo + parâmetros claros.</div></li>
-        <li class="pl-16 relative"><div class="absolute left-0 w-12 h-12 rounded-full bg-yellow-400 text-black grid place-items-center font-bold">5</div><div class="font-bold">Configure modelo, contexto e custo</div><div class="text-gray-400 text-sm">Comece com modelo barato, sobe se precisar.</div></li>
-        <li class="pl-16 relative"><div class="absolute left-0 w-12 h-12 rounded-full bg-yellow-400 text-black grid place-items-center font-bold">6</div><div class="font-bold">Monitore intents não resolvidos toda semana</div><div class="text-gray-400 text-sm">É aí que mora o roadmap de melhoria.</div></li>
-      </ol>
+    <div class="font-bold text-gray-300 mb-2">Agentic.basico</div>
+    <div>curso visual (v1) · curso completo (v2) · arena multi-agente · tudo client-side</div>
+    <div class="mt-4 flex justify-center gap-4">
+      <a href="v1/index.html" class="hover:text-gray-300">v1</a>
+      <a href="v2/index.html" class="hover:text-gray-300">v2</a>
+      <a href="v2/curso/index.html" class="hover:text-gray-300">curso</a>
+      <a href="v2/sistema.html" class="hover:text-gray-300">sistema</a>
+      <a href="https://inema.club" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300">INEMA.CLUB ↗</a>
     </div>
   </div>
-</section>
-
-<!-- ============ SISTEMA ============ -->
-<section id="sistema" class="py-20 bg-gradient-to-b from-panel/50 to-ink">
-  <div class="max-w-7xl mx-auto px-6">
-    <div class="text-center mb-10">
-      <span class="chip bg-yellow-400/10 text-yellow-400 border border-yellow-400/30">aplicação prática</span>
-      <h2 class="mt-3 text-3xl md:text-4xl font-bold">Sistema: crie e gerencie seus agentes</h2>
-      <p class="text-gray-400 mt-2">Tudo salvo localmente no seu navegador (localStorage). Exporte/importe quando quiser.</p>
-    </div>
-
-    <div class="grid lg:grid-cols-12 gap-6">
-      <!-- Lista -->
-      <aside class="lg:col-span-4 bg-panel border border-line rounded-2xl p-4">
-        <div class="flex items-center justify-between mb-3">
-          <div class="font-bold">Meus agentes</div>
-          <button onclick="newAgent()" class="px-3 py-1.5 bg-yellow-400 text-black rounded-lg text-sm font-semibold hover:bg-yellow-300">+ novo</button>
-        </div>
-        <div id="agent-list" class="space-y-2"></div>
-        <div class="border-t border-line mt-4 pt-3 flex gap-2 text-xs">
-          <button onclick="exportAgents()" class="flex-1 border border-line rounded px-2 py-1.5 hover:bg-white/5">⬇ exportar</button>
-          <label class="flex-1 border border-line rounded px-2 py-1.5 hover:bg-white/5 text-center cursor-pointer">
-            ⬆ importar
-            <input type="file" accept=".json" onchange="importAgents(event)" class="hidden">
-          </label>
-        </div>
-      </aside>
-
-      <!-- Editor -->
-      <div class="lg:col-span-8 bg-panel border border-line rounded-2xl p-6">
-        <div id="empty-editor" class="text-center text-gray-500 py-20">
-          <div class="text-5xl mb-3">👈</div>
-          <div>Selecione um agente à esquerda ou crie um novo.</div>
-        </div>
-
-        <form id="agent-form" class="hidden space-y-5" onsubmit="event.preventDefault(); saveAgent();">
-          <div class="flex items-center justify-between">
-            <input id="f-name" placeholder="Nome do agente" class="bg-transparent text-2xl font-bold border-b border-line focus:border-yellow-400 outline-none flex-1 pb-1"/>
-            <span id="save-status" class="text-xs text-gray-500"></span>
-          </div>
-
-          <!-- TABS -->
-          <div class="flex gap-1 border-b border-line">
-            <button type="button" data-tab="instr"    onclick="tab('instr')"    class="tab-btn px-4 py-2 text-sm border-b-2 border-yellow-400">📝 Instruções</button>
-            <button type="button" data-tab="know"     onclick="tab('know')"     class="tab-btn px-4 py-2 text-sm border-b-2 border-transparent text-gray-500">📚 Conhecimento</button>
-            <button type="button" data-tab="tools"    onclick="tab('tools')"    class="tab-btn px-4 py-2 text-sm border-b-2 border-transparent text-gray-500">🛠️ Ferramentas</button>
-            <button type="button" data-tab="intents"  onclick="tab('intents')"  class="tab-btn px-4 py-2 text-sm border-b-2 border-transparent text-gray-500">🎯 Intents</button>
-            <button type="button" data-tab="settings" onclick="tab('settings')" class="tab-btn px-4 py-2 text-sm border-b-2 border-transparent text-gray-500">⚙️ Settings</button>
-          </div>
-
-          <!-- Instruções -->
-          <div id="t-instr" class="tab-panel">
-            <label class="text-xs text-gray-400">System prompt — personalidade, tom, regras</label>
-            <textarea id="f-instructions" rows="10" class="w-full mt-2 bg-black/40 border border-line rounded-lg p-3 font-mono text-sm focus:border-yellow-400 outline-none"></textarea>
-          </div>
-
-          <!-- Conhecimento -->
-          <div id="t-know" class="tab-panel hidden">
-            <label class="text-xs text-gray-400">Fontes (uma por linha: tipo | nome | descrição)</label>
-            <textarea id="f-knowledge" rows="8" placeholder="pdf | faq.pdf | 142 perguntas frequentes&#10;url | site.com/imoveis | catálogo&#10;csv | propriedades.csv | 87 unidades" class="w-full mt-2 bg-black/40 border border-line rounded-lg p-3 font-mono text-sm focus:border-sky-400 outline-none"></textarea>
-          </div>
-
-          <!-- Ferramentas -->
-          <div id="t-tools" class="tab-panel hidden">
-            <label class="text-xs text-gray-400">Ferramentas (uma por linha: nome(param1, param2) — descrição)</label>
-            <textarea id="f-tools" rows="8" placeholder="buscar_imoveis(cidade, max) — lista imóveis da base&#10;slots_visita(imovel, data) — horários disponíveis&#10;agendar(slot, nome, n_pessoas) — confirma visita" class="w-full mt-2 bg-black/40 border border-line rounded-lg p-3 font-mono text-sm focus:border-emerald-400 outline-none"></textarea>
-          </div>
-
-          <!-- Intents -->
-          <div id="t-intents" class="tab-panel hidden">
-            <label class="text-xs text-gray-400">Intents não resolvidos (perguntas que o bot ainda não trata)</label>
-            <textarea id="f-intents" rows="8" placeholder="posso pagar em cripto?&#10;financia 100%?&#10;tem garagem dupla?" class="w-full mt-2 bg-black/40 border border-line rounded-lg p-3 font-mono text-sm focus:border-rose-400 outline-none"></textarea>
-          </div>
-
-          <!-- Settings -->
-          <div id="t-settings" class="tab-panel hidden">
-            <div class="grid md:grid-cols-2 gap-4">
-              <div>
-                <label class="text-xs text-gray-400">Modelo</label>
-                <select id="f-model" class="w-full mt-2 bg-black/40 border border-line rounded-lg p-2.5 focus:border-purple-400 outline-none">
-                  <option>gpt-4o-mini</option><option>gpt-4o</option><option>claude-3.5-sonnet</option><option>claude-3-haiku</option><option>gemini-1.5-flash</option>
-                </select>
-              </div>
-              <div>
-                <label class="text-xs text-gray-400">Contexto (últimas N mensagens)</label>
-                <input id="f-context" type="number" min="1" max="100" value="20" class="w-full mt-2 bg-black/40 border border-line rounded-lg p-2.5 focus:border-purple-400 outline-none"/>
-              </div>
-              <div>
-                <label class="text-xs text-gray-400">Custo máx por chat (R$)</label>
-                <input id="f-cost" type="number" step="0.01" value="0.12" class="w-full mt-2 bg-black/40 border border-line rounded-lg p-2.5 focus:border-purple-400 outline-none"/>
-              </div>
-              <div>
-                <label class="text-xs text-gray-400">Custom fields (separados por vírgula)</label>
-                <input id="f-fields" placeholder="nome, cidade, lead_score" class="w-full mt-2 bg-black/40 border border-line rounded-lg p-2.5 focus:border-purple-400 outline-none"/>
-              </div>
-            </div>
-          </div>
-
-          <!-- Score / barra de completude -->
-          <div class="border-t border-line pt-4">
-            <div class="flex items-center justify-between text-xs text-gray-400 mb-2">
-              <span>Completude do agente</span>
-              <span id="score-text">0%</span>
-            </div>
-            <div class="h-2 bg-black/40 rounded-full overflow-hidden">
-              <div id="score-bar" class="h-full bg-gradient-to-r from-yellow-400 to-emerald-400 transition-all" style="width:0%"></div>
-            </div>
-          </div>
-
-          <div class="flex gap-3 pt-2">
-            <button type="submit" class="px-5 py-2.5 bg-yellow-400 text-black font-semibold rounded-lg hover:bg-yellow-300">💾 Salvar</button>
-            <button type="button" onclick="previewPrompt()" class="px-5 py-2.5 border border-line rounded-lg hover:bg-white/5">👁 Preview do prompt</button>
-            <button type="button" onclick="deleteAgent()" class="ml-auto px-5 py-2.5 border border-rose-500/40 text-rose-400 rounded-lg hover:bg-rose-500/10">🗑 excluir</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Modal preview -->
-<div id="preview-modal" class="hidden fixed inset-0 bg-black/70 z-50 grid place-items-center p-4">
-  <div class="bg-panel border border-line rounded-2xl max-w-2xl w-full p-6">
-    <div class="flex items-center justify-between mb-4">
-      <div class="font-bold">Preview do prompt final</div>
-      <button onclick="document.getElementById('preview-modal').classList.add('hidden')" class="text-gray-500 hover:text-white">✕</button>
-    </div>
-    <pre id="preview-content" class="bg-black/60 border border-line rounded p-4 text-xs font-mono whitespace-pre-wrap max-h-[60vh] overflow-auto"></pre>
-  </div>
-</div>
-
-<footer class="border-t border-line py-8 text-center text-xs text-gray-500">
-  Construído como curso prático · dados ficam no seu navegador
 </footer>
 
-<script>
-/* ============================================================
-   DEMO INTERATIVA
-============================================================ */
-const demoScript = [
-  { from:'user', text:'Procuro imóveis em Mumbai' },
-  { from:'think', text:'intent = busca_imovel · cidade=Mumbai · chamando buscar_imoveis("Mumbai", 3)' },
-  { from:'bot', text:'Encontrei 3 ótimas opções em Mumbai:', cards:[
-    {emoji:'🏙️', t:'L&T Crescent Bay', d:'3BHK · 1.450 ft² · ₹4,2 Cr · vista mar'},
-    {emoji:'🌳', t:'Lodha Park',       d:'2BHK · 1.100 ft² · ₹2,8 Cr · parque'},
-    {emoji:'🏢', t:'Oberoi 360 West',  d:'4BHK · 2.300 ft² · ₹8,5 Cr · premium'}
-  ], q:'Algum chamou sua atenção?' },
-  { from:'user', text:'Me conta mais do Crescent' },
-  { from:'think', text:'consulta detalhe(imovel="Crescent Bay") → 14 amenities, escola 400m, metrô 600m' },
-  { from:'bot', text:'L&T Crescent Bay — 3 quartos, 2 vagas, piscina, academia, escola a 400m, metrô a 600m. Quer que eu verifique horários de visita para amanhã?' },
-  { from:'user', text:'Sim' },
-  { from:'think', text:'chamando slots_visita("Crescent Bay", "amanhã") → [10h, 14h, 16h]' },
-  { from:'bot', text:'Horários disponíveis:', buttons:['10:00','14:00','16:00'] },
-  { from:'user', text:'10h' },
-  { from:'bot', text:'Quantas pessoas vão na visita?' },
-  { from:'user', text:'2' },
-  { from:'think', text:'chamando agendar(slot="10:00", n_pessoas=2) → confirmation_id=#A8421' },
-  { from:'bot', text:'✅ Confirmando: L&T Crescent Bay, amanhã 10:00, 2 pessoas. Confirma?' },
-  { from:'user', text:'Sim' },
-  { from:'bot', text:'🎉 Visita agendada! Código #A8421. Enviei os detalhes no WhatsApp.' },
-];
-
-let demoIdx = 0, autoTimer = null;
-function renderMsg(m){
-  const chat = document.getElementById('chat');
-  if(m.from === 'think'){
-    document.getElementById('think').insertAdjacentHTML('beforeend',
-      `<div class="bg-yellow-400/5 border border-yellow-400/20 rounded-lg p-2 text-yellow-300">${m.text}</div>`);
-    document.getElementById('think').scrollTop = 9e9;
-    return;
-  }
-  const isUser = m.from === 'user';
-  let html = `<div class="flex ${isUser?'justify-end':'justify-start'}">
-    <div class="${isUser?'bg-yellow-400 text-black':'bg-white/5 border border-line text-gray-100'} max-w-[80%] rounded-2xl px-4 py-2.5 text-sm">${m.text}`;
-  if(m.cards) html += `<div class="mt-3 space-y-2">${m.cards.map(c=>`
-    <div class="bg-black/40 border border-line rounded-lg p-2 flex gap-2 items-center text-gray-100">
-      <span class="text-xl">${c.emoji}</span>
-      <div><div class="font-semibold text-xs">${c.t}</div><div class="text-[11px] text-gray-400">${c.d}</div></div>
-    </div>`).join('')}</div>`;
-  if(m.q) html += `<div class="mt-2 text-sm">${m.q}</div>`;
-  if(m.buttons) html += `<div class="mt-2 flex flex-wrap gap-2">${m.buttons.map(b=>`<span class="chip bg-black/40 border border-yellow-400/40 text-yellow-300">${b}</span>`).join('')}</div>`;
-  html += `</div></div>`;
-  chat.insertAdjacentHTML('beforeend', html);
-  chat.scrollTop = 9e9;
-}
-function nextDemo(){
-  if(demoIdx >= demoScript.length){ document.getElementById('next-btn').textContent = '✓ fim — clique ↻ reiniciar'; return; }
-  renderMsg(demoScript[demoIdx++]);
-  // se a próxima é "think", renderiza junto (parte do mesmo turno)
-  if(demoScript[demoIdx] && demoScript[demoIdx].from === 'think'){
-    renderMsg(demoScript[demoIdx++]);
-  }
-}
-function autoDemo(){
-  if(autoTimer){ clearInterval(autoTimer); autoTimer=null; return; }
-  autoTimer = setInterval(()=>{ if(demoIdx>=demoScript.length){ clearInterval(autoTimer); autoTimer=null; } else nextDemo(); }, 1200);
-}
-function resetDemo(){
-  demoIdx = 0; document.getElementById('chat').innerHTML=''; document.getElementById('think').innerHTML='';
-  document.getElementById('next-btn').textContent = '▶ Próxima fala';
-  if(autoTimer){ clearInterval(autoTimer); autoTimer=null; }
-}
-
-/* ============================================================
-   SISTEMA DE AGENTES
-============================================================ */
-const STORAGE = 'agentic.agents.v1';
-let agents = JSON.parse(localStorage.getItem(STORAGE) || '[]');
-let currentId = null;
-let saveTimer = null;
-
-function uid(){ return Math.random().toString(36).slice(2,9); }
-function persist(){ localStorage.setItem(STORAGE, JSON.stringify(agents)); renderList(); }
-
-function seedIfEmpty(){
-  if(agents.length) return;
-  agents.push({
-    id: uid(), name: 'Aura · Imobiliária L&T',
-    instructions: 'Você é Aura, consultora imobiliária da L&T.\nTom: cordial, direto, nunca insistente.\nRegras:\n- Sempre confirmar cidade antes de listar imóveis\n- Máximo 3 imóveis por resposta\n- Nunca inventar endereços; use a base',
-    knowledge: 'pdf | faq.pdf | 142 perguntas\nurl | lnt.com/imoveis | catálogo\ncsv | propriedades.csv | 87 unidades',
-    tools: 'buscar_imoveis(cidade, max) — lista da base\nslots_visita(imovel, data) — horários\nagendar(slot, nome, n_pessoas) — confirma',
-    intents: 'posso pagar em cripto?\nfinancia 100%?\ntem garagem dupla?',
-    model: 'gpt-4o-mini', context: 20, cost: 0.12, fields: 'nome, cidade, lead_score'
-  });
-  persist();
-}
-
-function renderList(){
-  const el = document.getElementById('agent-list');
-  if(!agents.length){ el.innerHTML = '<div class="text-xs text-gray-500 text-center py-8">nenhum agente ainda</div>'; return; }
-  el.innerHTML = agents.map(a => {
-    const score = scoreOf(a);
-    const active = a.id === currentId;
-    return `<button onclick="selectAgent('${a.id}')" class="w-full text-left p-3 rounded-lg border ${active?'border-yellow-400/60 bg-yellow-400/5':'border-line hover:bg-white/5'}">
-      <div class="flex items-center justify-between">
-        <div class="font-semibold text-sm truncate">${a.name || '(sem nome)'}</div>
-        <span class="text-xs text-gray-500">${score}%</span>
-      </div>
-      <div class="text-xs text-gray-500 truncate">${a.model} · ${(a.tools||'').split('\\n').filter(Boolean).length} tools</div>
-    </button>`;
-  }).join('');
-}
-
-function scoreOf(a){
-  let n = 0;
-  if(a.name) n+=15;
-  if(a.instructions && a.instructions.length > 30) n+=25;
-  if(a.knowledge) n+=20;
-  if(a.tools) n+=20;
-  if(a.model) n+=10;
-  if(a.fields) n+=10;
-  return n;
-}
-
-function newAgent(){
-  const a = { id: uid(), name:'Novo agente', instructions:'', knowledge:'', tools:'', intents:'', model:'gpt-4o-mini', context:20, cost:0.12, fields:'' };
-  agents.unshift(a); currentId = a.id; persist(); loadInto(a);
-}
-
-function selectAgent(id){
-  currentId = id; const a = agents.find(x=>x.id===id); if(a) loadInto(a); renderList();
-}
-
-function loadInto(a){
-  document.getElementById('empty-editor').classList.add('hidden');
-  document.getElementById('agent-form').classList.remove('hidden');
-  document.getElementById('f-name').value = a.name || '';
-  document.getElementById('f-instructions').value = a.instructions || '';
-  document.getElementById('f-knowledge').value = a.knowledge || '';
-  document.getElementById('f-tools').value = a.tools || '';
-  document.getElementById('f-intents').value = a.intents || '';
-  document.getElementById('f-model').value = a.model || 'gpt-4o-mini';
-  document.getElementById('f-context').value = a.context || 20;
-  document.getElementById('f-cost').value = a.cost || 0.12;
-  document.getElementById('f-fields').value = a.fields || '';
-  updateScore();
-}
-
-function readForm(){
-  return {
-    name: document.getElementById('f-name').value.trim(),
-    instructions: document.getElementById('f-instructions').value,
-    knowledge: document.getElementById('f-knowledge').value,
-    tools: document.getElementById('f-tools').value,
-    intents: document.getElementById('f-intents').value,
-    model: document.getElementById('f-model').value,
-    context: +document.getElementById('f-context').value,
-    cost: +document.getElementById('f-cost').value,
-    fields: document.getElementById('f-fields').value
-  };
-}
-
-function saveAgent(silent){
-  if(!currentId) return;
-  const i = agents.findIndex(a=>a.id===currentId); if(i<0) return;
-  agents[i] = { ...agents[i], ...readForm() };
-  persist();
-  if(!silent){
-    const s = document.getElementById('save-status');
-    s.textContent = '✓ salvo'; setTimeout(()=>s.textContent='', 1500);
-  }
-  updateScore();
-}
-
-function deleteAgent(){
-  if(!currentId) return;
-  if(!confirm('Excluir este agente?')) return;
-  agents = agents.filter(a=>a.id!==currentId);
-  currentId = null; persist();
-  document.getElementById('empty-editor').classList.remove('hidden');
-  document.getElementById('agent-form').classList.add('hidden');
-}
-
-function tab(name){
-  document.querySelectorAll('.tab-btn').forEach(b=>{
-    const on = b.dataset.tab === name;
-    b.classList.toggle('border-yellow-400', on);
-    b.classList.toggle('border-transparent', !on);
-    b.classList.toggle('text-gray-500', !on);
-  });
-  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.add('hidden'));
-  document.getElementById('t-'+name).classList.remove('hidden');
-}
-
-function updateScore(){
-  const s = scoreOf(readForm());
-  document.getElementById('score-bar').style.width = s + '%';
-  document.getElementById('score-text').textContent = s + '%';
-}
-
-function previewPrompt(){
-  const a = readForm();
-  const txt =
-`[SYSTEM PROMPT — ${a.name}]
-${a.instructions}
-
-[CONHECIMENTO DISPONÍVEL]
-${a.knowledge || '(nenhum)'}
-
-[FERRAMENTAS]
-${a.tools || '(nenhuma)'}
-
-[CONTEXTO DO CLIENTE — custom fields]
-${(a.fields||'').split(',').map(f=>f.trim()).filter(Boolean).map(f=>`${f}: {{${f}}}`).join('\n') || '(nenhum)'}
-
-[CONFIG]
-modelo=${a.model} · contexto=${a.context} msgs · custo_máx=R$${a.cost}
-
-[INTENTS NÃO RESOLVIDOS — para você considerar e responder com cuidado]
-${a.intents || '(nenhum)'}`;
-  document.getElementById('preview-content').textContent = txt;
-  document.getElementById('preview-modal').classList.remove('hidden');
-}
-
-function exportAgents(){
-  const blob = new Blob([JSON.stringify(agents, null, 2)], {type:'application/json'});
-  const url = URL.createObjectURL(blob); const a = document.createElement('a');
-  a.href = url; a.download = 'agentes.json'; a.click(); URL.revokeObjectURL(url);
-}
-function importAgents(e){
-  const f = e.target.files[0]; if(!f) return;
-  const r = new FileReader();
-  r.onload = ev => { try { const data = JSON.parse(ev.target.result); if(Array.isArray(data)){ agents = data; persist(); alert('Importado: ' + data.length + ' agentes'); } } catch{ alert('Arquivo inválido'); } };
-  r.readAsText(f);
-}
-
-// auto-save on input
-document.addEventListener('input', e => {
-  if(e.target.closest('#agent-form')){
-    clearTimeout(saveTimer); saveTimer = setTimeout(()=>saveAgent(true), 600);
-    updateScore();
-  }
-});
-
-// init
-seedIfEmpty();
-renderList();
-if(agents.length){ selectAgent(agents[0].id); }
-</script>
 </body>
 </html>
