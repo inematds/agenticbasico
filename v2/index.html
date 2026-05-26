@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Agentic AI · v2 — Hub</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config = { darkMode:'class', theme:{ extend:{ colors:{ ink:'#0b0f14', panel:'#11161d', line:'#1f2937' } } } }</script>
+<style>
+  body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .grid-bg {
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(250,204,21,.10), transparent 45%),
+      radial-gradient(circle at 85% 30%, rgba(56,189,248,.10), transparent 45%),
+      radial-gradient(circle at 50% 90%, rgba(168,85,247,.10), transparent 45%),
+      linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size: auto, auto, auto, 40px 40px, 40px 40px;
+  }
+  .chip { display:inline-flex; align-items:center; gap:.4rem; padding:.25rem .7rem; border-radius:999px; font-size:.72rem; font-weight:600; letter-spacing:.02em; }
+  .dot { width:.5rem; height:.5rem; border-radius:999px; background:#22c55e; box-shadow:0 0 0 0 rgba(34,197,94,.7); animation: pulse 1.6s infinite; }
+  @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(34,197,94,.7)} 70%{box-shadow:0 0 0 10px rgba(34,197,94,0)} 100%{box-shadow:0 0 0 0 rgba(34,197,94,0)} }
+  .hover-lift { transition: transform .25s, border-color .25s, box-shadow .25s; }
+  .hover-lift:hover { transform: translateY(-4px); border-color: rgba(250,204,21,.4); box-shadow: 0 20px 60px -20px rgba(250,204,21,.3); }
+  .ring-glow { box-shadow: 0 0 0 1px rgba(255,255,255,.06), 0 30px 80px -30px rgba(250,204,21,.4); }
+  .float { animation: float 6s ease-in-out infinite; }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+</style>
+</head>
+<body class="bg-ink text-gray-100 dark">
+
+<!-- NAV -->
+<nav class="sticky top-0 z-40 backdrop-blur bg-ink/80 border-b border-line">
+  <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+    <a href="#" class="flex items-center gap-2 font-bold">
+      <span class="w-8 h-8 rounded-lg bg-yellow-400 text-black grid place-items-center">A</span>
+      Agentic<span class="text-yellow-400">.</span>v2
+      <span class="chip bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 ml-2">novo</span>
+    </a>
+    <div class="hidden md:flex items-center gap-1 text-sm">
+      <a href="#opcoes" class="px-3 py-2 rounded hover:bg-white/5">Opções</a>
+      <a href="#novidades" class="px-3 py-2 rounded hover:bg-white/5">O que mudou</a>
+      <a href="../index.html" class="px-3 py-2 rounded hover:bg-white/5 text-gray-400">v1 ↩</a>
+      <a href="sistema.html" class="px-3 py-2 rounded bg-yellow-400 text-black font-semibold hover:bg-yellow-300">Abrir sistema →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="grid-bg border-b border-line">
+  <div class="max-w-7xl mx-auto px-6 py-24 text-center">
+    <span class="chip bg-yellow-400/10 text-yellow-400 border border-yellow-400/30">
+      <span class="dot"></span> v2 · curso completo + sistema multi-agente
+    </span>
+    <h1 class="mt-5 text-4xl md:text-6xl font-bold leading-tight max-w-4xl mx-auto">
+      Aprenda <span class="text-yellow-400">agentes de IA</span>.<br>
+      Construa <span class="text-sky-400">vários ao mesmo tempo</span>.
+    </h1>
+    <p class="mt-6 text-gray-400 text-lg max-w-2xl mx-auto">
+      Duas opções de curso (visual rápido ou completo em trilhas) e um sistema
+      que roda múltiplos agentes em paralelo numa arena lado a lado.
+    </p>
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <a href="#opcoes" class="px-6 py-3 rounded-lg bg-yellow-400 text-black font-semibold hover:bg-yellow-300">Escolher caminho</a>
+      <a href="sistema.html" class="px-6 py-3 rounded-lg border border-line hover:bg-white/5">Arena multi-agente →</a>
+    </div>
+
+    <!-- mini stats -->
+    <div class="mt-14 grid grid-cols-3 md:grid-cols-4 gap-4 max-w-3xl mx-auto text-sm">
+      <div class="bg-panel/60 border border-line rounded-xl p-4"><div class="text-2xl font-bold text-yellow-400">3</div><div class="text-gray-500">trilhas INEMA</div></div>
+      <div class="bg-panel/60 border border-line rounded-xl p-4"><div class="text-2xl font-bold text-sky-400">9</div><div class="text-gray-500">módulos completos</div></div>
+      <div class="bg-panel/60 border border-line rounded-xl p-4"><div class="text-2xl font-bold text-emerald-400">4</div><div class="text-gray-500">agentes simultâneos</div></div>
+      <div class="hidden md:block bg-panel/60 border border-line rounded-xl p-4"><div class="text-2xl font-bold text-purple-400">∞</div><div class="text-gray-500">agentes seus</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- DUAS OPÇÕES -->
+<section id="opcoes" class="py-20 border-b border-line">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-12">
+      <span class="chip bg-white/5 text-gray-400 border border-line">escolha seu ritmo</span>
+      <h2 class="mt-3 text-3xl md:text-4xl font-bold">Duas formas de aprender</h2>
+      <p class="text-gray-400 mt-2">As duas opções continuam disponíveis. Vá pela que combinar com seu momento.</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+      <!-- Opção A: Visual rápido (v1) -->
+      <a href="../index.html" class="hover-lift block bg-panel border border-line rounded-2xl p-8 ring-glow">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 rounded-xl bg-yellow-400/15 grid place-items-center text-2xl">⚡</div>
+          <div>
+            <div class="font-bold text-xl">Curso Visual Rápido</div>
+            <div class="text-xs text-gray-500">~15 min · página única · interativa</div>
+          </div>
+        </div>
+        <p class="text-gray-400 text-sm mb-4">
+          Aprenda a anatomia em 5 pilares com diagrama hub-and-spoke, demo de chat
+          imobiliário ponta a ponta e receita de 6 passos. Tudo em uma página rolável.
+        </p>
+        <div class="grid grid-cols-3 gap-2 text-[11px] text-center">
+          <div class="bg-black/30 border border-line rounded p-2">🧠 Anatomia</div>
+          <div class="bg-black/30 border border-line rounded p-2">💬 Demo</div>
+          <div class="bg-black/30 border border-line rounded p-2">📋 Receita</div>
+        </div>
+        <div class="mt-5 text-yellow-400 font-semibold text-sm">Abrir v1 →</div>
+      </a>
+
+      <!-- Opção B: Curso completo (INEMA) -->
+      <a href="curso/index.html" class="hover-lift block bg-panel border border-line rounded-2xl p-8 ring-glow">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 rounded-xl bg-sky-400/15 grid place-items-center text-2xl">📚</div>
+          <div>
+            <div class="font-bold text-xl">Curso Completo INEMA</div>
+            <div class="text-xs text-gray-500">3 trilhas · 9 módulos · ~3h</div>
+          </div>
+        </div>
+        <p class="text-gray-400 text-sm mb-4">
+          Trilhas estruturadas com mapa, tópicos detalhados, exemplos visuais
+          (timelines, grids ✓/✗, code boxes) e light/dark mode. Estude no seu ritmo.
+        </p>
+        <div class="grid grid-cols-3 gap-2 text-[11px] text-center">
+          <div class="bg-emerald-500/10 border border-emerald-500/30 rounded p-2 text-emerald-400">T1 · Anatomia</div>
+          <div class="bg-blue-500/10 border border-blue-500/30 rounded p-2 text-blue-400">T2 · Construção</div>
+          <div class="bg-purple-500/10 border border-purple-500/30 rounded p-2 text-purple-400">T3 · Operação</div>
+        </div>
+        <div class="mt-5 text-sky-400 font-semibold text-sm">Abrir trilhas →</div>
+      </a>
+    </div>
+
+    <!-- Opção C: Sistema -->
+    <div class="mt-6">
+      <a href="sistema.html" class="hover-lift block bg-gradient-to-br from-panel to-black border border-yellow-400/30 rounded-2xl p-8 ring-glow">
+        <div class="flex items-start justify-between gap-6 flex-wrap">
+          <div class="flex-1 min-w-[280px]">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 rounded-xl bg-yellow-400 text-black grid place-items-center text-2xl float">🤖</div>
+              <div>
+                <div class="font-bold text-xl">Sistema · Arena Multi-Agente</div>
+                <div class="text-xs text-gray-500">crie, gerencie e rode vários agentes <b class="text-yellow-400">em paralelo</b></div>
+              </div>
+            </div>
+            <p class="text-gray-400 text-sm mb-4 max-w-xl">
+              Cadastre quantos agentes quiser, escolha 2 a 4 e dispare a mesma
+              pergunta pra todos ao mesmo tempo. Compare respostas lado a lado,
+              tempo de processamento e custo. Ou ative o modo orquestração
+              pra encadear agentes em pipeline.
+            </p>
+            <div class="flex flex-wrap gap-2 text-[11px]">
+              <span class="chip bg-yellow-400/10 text-yellow-400 border border-yellow-400/30">▶ paralelo</span>
+              <span class="chip bg-sky-400/10 text-sky-400 border border-sky-400/30">→ orquestração</span>
+              <span class="chip bg-emerald-400/10 text-emerald-400 border border-emerald-400/30">💾 localStorage</span>
+              <span class="chip bg-purple-400/10 text-purple-400 border border-purple-400/30">⬇ export JSON</span>
+              <span class="chip bg-rose-400/10 text-rose-400 border border-rose-400/30">⌘+↵ atalhos</span>
+            </div>
+          </div>
+
+          <!-- mini preview da arena -->
+          <div class="grid grid-cols-3 gap-2 w-full md:w-80">
+            <div class="bg-black/40 border border-yellow-400/40 rounded-lg p-2 text-center">
+              <div class="text-xl">🏠</div><div class="text-[10px] font-semibold mt-1">Aura</div>
+              <div class="text-[9px] text-gray-500 mt-1">gpt-4o</div>
+            </div>
+            <div class="bg-black/40 border border-sky-400/40 rounded-lg p-2 text-center">
+              <div class="text-xl">⚖️</div><div class="text-[10px] font-semibold mt-1">Lex</div>
+              <div class="text-[9px] text-gray-500 mt-1">claude</div>
+            </div>
+            <div class="bg-black/40 border border-emerald-400/40 rounded-lg p-2 text-center">
+              <div class="text-xl">🛟</div><div class="text-[10px] font-semibold mt-1">Nova</div>
+              <div class="text-[9px] text-gray-500 mt-1">gemini</div>
+            </div>
+            <div class="col-span-3 bg-black/40 border border-line rounded-lg p-2 text-[10px] text-gray-500 text-center">
+              ▶ disparando pra 3 agentes…
+            </div>
+          </div>
+        </div>
+        <div class="mt-5 text-yellow-400 font-semibold text-sm">Entrar na arena →</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- NOVIDADES v2 -->
+<section id="novidades" class="py-20 border-b border-line bg-panel/40">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-12">
+      <span class="chip bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">changelog</span>
+      <h2 class="mt-3 text-3xl md:text-4xl font-bold">O que mudou na v2</h2>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-5">
+      <div class="bg-panel border border-line rounded-2xl p-6">
+        <div class="text-3xl">📚</div>
+        <div class="font-bold mt-3">Curso completo INEMA</div>
+        <p class="text-sm text-gray-400 mt-2">3 trilhas estruturadas (Anatomia, Construção, Operação) com 9 módulos detalhados, light/dark mode, navegação consistente.</p>
+      </div>
+      <div class="bg-panel border border-line rounded-2xl p-6">
+        <div class="text-3xl">⚡</div>
+        <div class="font-bold mt-3">Arena multi-agente</div>
+        <p class="text-sm text-gray-400 mt-2">Rode 2-4 agentes simultaneamente. Mesmo prompt, respostas paralelas, comparação lado a lado. Ideal pra A/B testar instruções.</p>
+      </div>
+      <div class="bg-panel border border-line rounded-2xl p-6">
+        <div class="text-3xl">🔗</div>
+        <div class="font-bold mt-3">Modo orquestração</div>
+        <p class="text-sm text-gray-400 mt-2">Encadeie agentes: a saída de um vira a entrada do próximo. Pipeline visual com setas conectando os cards.</p>
+      </div>
+      <div class="bg-panel border border-line rounded-2xl p-6">
+        <div class="text-3xl">📊</div>
+        <div class="font-bold mt-3">Dashboard de uso</div>
+        <p class="text-sm text-gray-400 mt-2">Total de agentes, mensagens, custo acumulado simulado e qual agente é mais usado. Visão de operação.</p>
+      </div>
+      <div class="bg-panel border border-line rounded-2xl p-6">
+        <div class="text-3xl">🎨</div>
+        <div class="font-bold mt-3">Cores por agente</div>
+        <p class="text-sm text-gray-400 mt-2">Cada agente tem uma cor (yellow/sky/emerald/rose/purple/amber) que ilumina suas bordas na arena pra leitura rápida.</p>
+      </div>
+      <div class="bg-panel border border-line rounded-2xl p-6">
+        <div class="text-3xl">⌨️</div>
+        <div class="font-bold mt-3">Atalhos</div>
+        <p class="text-sm text-gray-400 mt-2"><kbd class="bg-black/40 px-1.5 py-0.5 rounded border border-line text-xs">⌘/Ctrl + ↵</kbd> dispara pra todos os selecionados. Fluxo de teclado.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP DE ESTUDO -->
+<section class="py-20 border-b border-line">
+  <div class="max-w-4xl mx-auto px-6">
+    <div class="text-center mb-12">
+      <span class="chip bg-white/5 text-gray-400 border border-line">sugestão</span>
+      <h2 class="mt-3 text-3xl md:text-4xl font-bold">Roadmap recomendado</h2>
+    </div>
+    <ol class="space-y-4">
+      <li class="flex gap-4 bg-panel border border-line rounded-xl p-5">
+        <div class="w-10 h-10 shrink-0 rounded-full bg-yellow-400 text-black grid place-items-center font-bold">1</div>
+        <div>
+          <div class="font-bold">Veja o visual rápido (15 min)</div>
+          <div class="text-sm text-gray-400">Pra ter a foto inteira antes de mergulhar. <a href="../index.html" class="text-yellow-400 hover:underline">abrir v1 →</a></div>
+        </div>
+      </li>
+      <li class="flex gap-4 bg-panel border border-line rounded-xl p-5">
+        <div class="w-10 h-10 shrink-0 rounded-full bg-sky-400 text-black grid place-items-center font-bold">2</div>
+        <div>
+          <div class="font-bold">Faça a Trilha 1 — Anatomia</div>
+          <div class="text-sm text-gray-400">Aprofunda nos 5 pilares. <a href="curso/trilha1/index.html" class="text-sky-400 hover:underline">começar →</a></div>
+        </div>
+      </li>
+      <li class="flex gap-4 bg-panel border border-line rounded-xl p-5">
+        <div class="w-10 h-10 shrink-0 rounded-full bg-emerald-400 text-black grid place-items-center font-bold">3</div>
+        <div>
+          <div class="font-bold">Crie seu 1º agente no sistema</div>
+          <div class="text-sm text-gray-400">Aplica o que viu. Edite, preview do prompt, salve. <a href="sistema.html" class="text-emerald-400 hover:underline">abrir sistema →</a></div>
+        </div>
+      </li>
+      <li class="flex gap-4 bg-panel border border-line rounded-xl p-5">
+        <div class="w-10 h-10 shrink-0 rounded-full bg-purple-400 text-black grid place-items-center font-bold">4</div>
+        <div>
+          <div class="font-bold">Trilhas 2 e 3 + arena multi-agente</div>
+          <div class="text-sm text-gray-400">Construção e operação. Teste A/B na arena com 3 versões do mesmo prompt.</div>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<footer class="border-t border-line py-10 text-center text-xs text-gray-500">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="font-bold text-gray-300 mb-2">Agentic.v2</div>
+    <div>curso visual · curso INEMA · arena multi-agente · tudo local no navegador</div>
+    <div class="mt-3 flex justify-center gap-4">
+      <a href="../index.html" class="hover:text-gray-300">v1</a>
+      <a href="curso/index.html" class="hover:text-gray-300">curso</a>
+      <a href="sistema.html" class="hover:text-gray-300">sistema</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

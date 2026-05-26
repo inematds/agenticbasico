@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 2.2 — Conectando conhecimento e ferramentas | Agentic AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { darkMode: 'class', theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } } }</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37,99,235,0.12); }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37,99,235,0.25); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37,99,235,0.25); }
+    html:not(.dark) .text-red-400 { color: #b91c1c; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(185,28,28,0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(185,28,28,0.25); }
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161,98,7,0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255,255,255,0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300"><span class="text-2xl">🤖</span><span class="font-bold text-lg hidden sm:inline">Agentic AI</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-neutral-100 hover:bg-dark-700 transition-colors"><span class="sm:hidden">Início</span><span class="hidden sm:inline">Início</span></a>
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Anatomia</span></a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Construção</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Operação</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../index.html" class="hover:text-blue-400">Início</a><span>/</span>
+      <a href="index.html" class="hover:text-blue-400">Trilha 2</a><span>/</span>
+      <span class="text-blue-400">Módulo 2.2</span>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-semibold rounded-full mb-4">MÓDULO 2.2</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🔌 Conectando conhecimento e ferramentas</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">Carregar FAQs, sites e CSVs como base de conhecimento; declarar tools com schemas que o modelo entende e chama na hora certa.</p>
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">50</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">Médio</div><div class="text-xs text-neutral-400">Nível</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">Prático</div><div class="text-xs text-neutral-400">Tipo</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <h2 class="text-2xl font-bold mb-6">Conteúdo detalhado</h2>
+
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">1</span><h2 class="text-2xl font-bold">📄 Fontes de conhecimento</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Antes de "plugar RAG", saiba o que vai plugar. Conteúdo se divide em estruturado (CSV, SQL, API) e não-estruturado (FAQ, PDF, página). Cada tipo exige tratamento diferente.</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+          <h4 class="font-bold text-blue-400 mb-4">✓ Estruturado — direto via tool</h4>
+          <ul class="space-y-3 text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-blue-400">✓</span><span>Catálogo de produtos em CSV</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400">✓</span><span>Tabela de preços em SQL</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400">✓</span><span>Endpoint REST de estoque</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400">✓</span><span>Calendário de horários</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400">✓</span><span>Dados de cliente no CRM</span></li>
+          </ul>
+        </div>
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+          <h4 class="font-bold text-red-400 mb-4">✗ Não-estruturado — via RAG</h4>
+          <ul class="space-y-3 text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>FAQ em página HTML</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Política de devolução em PDF</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Manual técnico em Markdown</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Base de conhecimento Notion/Confluence</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Glossário corporativo</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">2</span><h2 class="text-2xl font-bold">✂️ Chunking e embeddings</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">RAG depende de quebrar documentos em pedaços pequenos (chunks) e converter cada um em vetor (embedding) para busca semântica. Chunk errado = recall ruim = bot que diz "não sei" sobre coisa que está na base.</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5"><div class="text-2xl font-bold text-blue-400 mb-1">300-800 tokens</div><p class="text-sm text-neutral-400">Pequeno demais perde contexto, grande demais perde precisão.</p></div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5"><div class="text-2xl font-bold text-emerald-400 mb-1">10-15% overlap</div><p class="text-sm text-neutral-400">Sobreposição entre chunks evita cortar conceito ao meio.</p></div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5"><div class="text-2xl font-bold text-primary-400 mb-1">Por seção, não tokens</div><p class="text-sm text-neutral-400">Quebrar por H2/H3 vence quebra cega por tamanho.</p></div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5"><div class="text-2xl font-bold text-purple-400 mb-1">Metadata sempre</div><p class="text-sm text-neutral-400">Cada chunk com source, date, section, version.</p></div>
+      </div>      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Embeddings</h3>
+        <p class="text-neutral-300">Reembede tudo quando trocar de modelo de embedding. Misturar embeddings de dois modelos diferentes na mesma collection gera busca aleatória.</p>
+      </div>
+    </section>
+
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">3</span><h2 class="text-2xl font-bold">🔍 RAG na prática</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">RAG = buscar os k pedaços mais relevantes, injetar no prompt, deixar o modelo responder com base neles (e citar a fonte). Soa simples, mas tem armadilha em cada etapa.</p>
+      <div class="space-y-6 mb-6">
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center"><span class="text-blue-400 font-bold">1</span></div>
+          <div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+            <h4 class="font-semibold mb-2">1. Embed da query</h4>
+            <p class="text-sm text-neutral-300">Pergunta do usuário vira vetor com o mesmo modelo dos chunks.</p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center"><span class="text-blue-400 font-bold">2</span></div>
+          <div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+            <h4 class="font-semibold mb-2">2. Busca top-k</h4>
+            <p class="text-sm text-neutral-300">Vector store devolve os k chunks mais próximos (k=5 é bom default).</p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center"><span class="text-blue-400 font-bold">3</span></div>
+          <div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+            <h4 class="font-semibold mb-2">3. Reranking (opcional)</h4>
+            <p class="text-sm text-neutral-300">Modelo menor reordena os k por relevância real. Aumenta precisão.</p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center"><span class="text-blue-400 font-bold">4</span></div>
+          <div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+            <h4 class="font-semibold mb-2">4. Injeção no prompt</h4>
+            <p class="text-sm text-neutral-300">Chunks entram em bloco marcado "[CONHECIMENTO]". Modelo cita.</p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center"><span class="text-blue-400 font-bold">5</span></div>
+          <div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+            <h4 class="font-semibold mb-2">5. Geração com citação</h4>
+            <p class="text-sm text-neutral-300">Resposta inclui referência ao chunk usado. Auditável.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">4</span><h2 class="text-2xl font-bold">🛠️ Declarar tools</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Tool = nome + descrição + schema. O modelo nunca vê o código — só o contrato. Descrição ruim = tool ignorada. Schema ruim = parâmetros errados.</p>
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6 font-mono text-sm">
+        <div class="text-neutral-400 mb-3">// Tool bem declarada</div>
+        <pre class="text-neutral-300 whitespace-pre-wrap">{
+  "name": "buscar_imoveis",
+  "description": "Busca imóveis disponíveis para venda ou aluguel
+                  no catálogo da Vivenda. Use sempre que o usuário
+                  pedir lista de opções por região, faixa de preço
+                  ou número de quartos.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "cidade": {"type": "string", "description": "Ex: São Paulo"},
+      "bairro": {"type": "string"},
+      "quartos": {"type": "integer", "minimum": 1},
+      "max_preco": {"type": "number"},
+      "finalidade": {"type": "string", "enum": ["venda", "aluguel"]}
+    },
+    "required": ["cidade", "finalidade"]
+  }
+}</pre>
+      </div>      <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center"><span class="mr-2">⚠️</span> Schema e backend juntos</h3>
+        <p class="text-neutral-300">Schema é contrato. Modelo respeita. Se você marca um campo como required, garanta que o backend trata erro quando vier vazio — porque algum dia vai vir.</p>
+      </div>
+    </section>
+
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">5</span><h2 class="text-2xl font-bold">🎯 Quando tool, quando RAG</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">A regra é simples mas é a que mais se erra: RAG para texto estático e relativamente raro de mudar; tool para dado dinâmico ou ação. Misturar mal aumenta latência e custo sem ganho.</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+          <h4 class="font-bold text-blue-400 mb-4">✓ RAG</h4>
+          <ul class="space-y-3 text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-blue-400">✓</span><span>Política de devolução</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400">✓</span><span>Manual de uso do produto</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400">✓</span><span>Lista de perguntas frequentes</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400">✓</span><span>Glossário e termos do negócio</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400">✓</span><span>Documentação técnica</span></li>
+          </ul>
+        </div>
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+          <h4 class="font-bold text-red-400 mb-4">✗ Tool</h4>
+          <ul class="space-y-3 text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Preço atual de produto</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Estoque em tempo real</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Horários disponíveis</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Status de pedido</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Qualquer escrita (criar, atualizar, cancelar)</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">6</span><h2 class="text-2xl font-bold">🧯 Tratamento de erro</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Tool vai falhar. Timeout, 500, parâmetro inválido, ratelimit. A pergunta não é "se", é "como". Tool que falha silenciosa vira agente que mente.</p>
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6 font-mono text-sm">
+        <div class="text-neutral-400 mb-3">// Erro estruturado devolvido ao modelo</div>
+        <pre class="text-neutral-300 whitespace-pre-wrap">[Tool error]
+{
+  "error": true,
+  "code": "TIMEOUT",
+  "message": "Catálogo demorou mais que 5s para responder. Tente novamente.",
+  "retryable": true
+}
+
+// Modelo lê e decide:
+// - Pode tentar de novo (1x).
+// - Se falhar de novo: "Marina, nosso catálogo está lento agora.
+//   Posso te avisar em alguns minutos quando voltar?"</pre>
+      </div>      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Sanitize errors</h3>
+        <p class="text-neutral-300">Nunca devolva ao modelo o erro cru do banco/API. Vire SQL exception em "banco indisponível". Vire 500 em "sistema com problema". Modelo não precisa do stack trace — e logar ele em log do LLM é vazamento.</p>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-blue-900/40 via-dark-800 to-dark-800 rounded-xl border border-blue-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">📌</span> Resumo do módulo</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-neutral-100">Fontes de conhecimento</strong><span class="text-neutral-400"> — estruturado vai por tool, não-estruturado por RAG</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-neutral-100">Chunking e embeddings</strong><span class="text-neutral-400"> — chunk certo é metade do trabalho</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-neutral-100">RAG na prática</strong><span class="text-neutral-400"> — RAG = buscar + injetar + citar</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-neutral-100">Declarar tools</strong><span class="text-neutral-400"> — tool = contrato claro entre modelo e backend</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-neutral-100">Quando tool, quando RAG</strong><span class="text-neutral-400"> — estático = RAG, dinâmico ou escrita = tool</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-neutral-100">Tratamento de erro</strong><span class="text-neutral-400"> — erro estruturado vira recuperação inteligente</span></div></div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-blue-400 mb-2">Próximo:</h3>
+          <p class="text-neutral-300">2.3 — 🎫 Custom fields e contexto do cliente</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-2-1.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Anterior</a>
+          <a href="modulo-2-3.html" class="flex-1 text-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-500 transition-colors">Próximo →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>Agentic AI — Módulo 2.2 • <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p></div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+    if (localStorage.getItem('theme') === 'light') { html.classList.remove('dark'); themeToggleDarkIcon.classList.remove('hidden'); } else { themeToggleLightIcon.classList.remove('hidden'); }
+    themeToggle.addEventListener('click', () => { themeToggleDarkIcon.classList.toggle('hidden'); themeToggleLightIcon.classList.toggle('hidden'); html.classList.toggle('dark'); localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light'); });
+  </script>
+</body>
+</html>

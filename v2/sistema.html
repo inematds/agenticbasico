@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Agentic.Sistema v2 — Multi-Agent Runner</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          ink: '#0b0f14',
+          panel: '#11161d',
+          panel2: '#161c25',
+          edge: '#1f2937',
+        },
+        fontFamily: {
+          sans: ['Inter', 'system-ui', 'sans-serif'],
+          mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+        }
+      }
+    }
+  }
+</script>
+<style>
+  /* ===== BASE ===== */
+  html, body { background: #0b0f14; color: #e5e7eb; font-family: 'Inter', system-ui, sans-serif; }
+  * { -webkit-font-smoothing: antialiased; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: #0b0f14; }
+  ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 6px; }
+  ::-webkit-scrollbar-thumb:hover { background: #374151; }
+
+  /* ===== GLASS ===== */
+  .glass {
+    background: linear-gradient(180deg, rgba(22,28,37,0.7), rgba(17,22,29,0.55));
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+  .glow-yellow { box-shadow: 0 0 0 1px rgba(250,204,21,.25), 0 8px 28px -8px rgba(250,204,21,.25); }
+
+  /* ===== AGENT COLORS ===== */
+  .agent-yellow  { --accent: #facc15; --accent-bg: rgba(250,204,21,.08); }
+  .agent-sky     { --accent: #38bdf8; --accent-bg: rgba(56,189,248,.08); }
+  .agent-emerald { --accent: #34d399; --accent-bg: rgba(52,211,153,.08); }
+  .agent-rose    { --accent: #fb7185; --accent-bg: rgba(251,113,133,.08); }
+  .agent-purple  { --accent: #c084fc; --accent-bg: rgba(192,132,252,.08); }
+  .agent-amber   { --accent: #fbbf24; --accent-bg: rgba(251,191,36,.08); }
+  .agent-card {
+    border: 1px solid #1f2937;
+    border-left: 3px solid var(--accent, #facc15);
+    background: linear-gradient(180deg, var(--accent-bg, rgba(250,204,21,.04)), transparent 40%), #11161d;
+  }
+  .agent-dot { background: var(--accent, #facc15); }
+  .agent-text { color: var(--accent, #facc15); }
+
+  /* ===== TYPING ===== */
+  .typing::after {
+    content: '▍';
+    color: #facc15;
+    animation: blink 1s steps(2) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+  .think-pulse { animation: pulse 1.4s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: .55; } 50% { opacity: 1; } }
+
+  /* ===== TABS ===== */
+  .tab-btn { color: #94a3b8; padding: 8px 14px; font-size: 13px; border-bottom: 2px solid transparent; }
+  .tab-btn.active { color: #facc15; border-color: #facc15; }
+
+  /* ===== INPUT ===== */
+  .field {
+    background: #0b0f14;
+    border: 1px solid #1f2937;
+    border-radius: 8px;
+    padding: 10px 12px;
+    width: 100%;
+    color: #e5e7eb;
+    font-size: 13px;
+    outline: none;
+    transition: all .15s;
+  }
+  .field:focus { border-color: #facc15; box-shadow: 0 0 0 3px rgba(250,204,21,.12); }
+  textarea.field { font-family: 'JetBrains Mono', ui-monospace, monospace; line-height: 1.55; resize: vertical; }
+  .btn {
+    background: #facc15; color: #0b0f14; font-weight: 600; padding: 8px 14px;
+    border-radius: 8px; font-size: 13px; transition: all .15s;
+  }
+  .btn:hover { background: #fde047; transform: translateY(-1px); }
+  .btn-ghost {
+    background: #161c25; color: #e5e7eb; border: 1px solid #1f2937; padding: 8px 14px;
+    border-radius: 8px; font-size: 13px; transition: all .15s;
+  }
+  .btn-ghost:hover { background: #1f2937; border-color: #374151; }
+
+  /* ===== PIPELINE ===== */
+  .pipe-arrow {
+    width: 32px; height: 2px; background: linear-gradient(90deg, #facc15, transparent);
+    position: relative;
+  }
+  .pipe-arrow::after {
+    content: '▶'; color: #facc15; position: absolute; right: -4px; top: -8px; font-size: 12px;
+  }
+
+  /* ===== FAB ===== */
+  .fab {
+    position: fixed; right: 28px; bottom: 28px; width: 56px; height: 56px;
+    border-radius: 50%; background: #facc15; color: #0b0f14; font-size: 26px;
+    box-shadow: 0 12px 30px -6px rgba(250,204,21,.5); transition: all .2s;
+    display: flex; align-items: center; justify-content: center; font-weight: 600;
+  }
+  .fab:hover { transform: scale(1.08) rotate(90deg); }
+
+  /* ===== MODAL ===== */
+  .modal-bg { background: rgba(0,0,0,.7); backdrop-filter: blur(6px); }
+
+  /* ===== FOCUS ===== */
+  button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+    outline: 2px solid #facc15; outline-offset: 2px;
+  }
+
+  /* ===== SCORE BAR ===== */
+  .score-bar { height: 4px; background: #1f2937; border-radius: 4px; overflow: hidden; }
+  .score-fill { height: 100%; background: linear-gradient(90deg, #facc15, #34d399); transition: width .4s; }
+
+  /* fade in */
+  .fade-in { animation: fadeIn .35s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body class="min-h-screen">
+
+<!-- ===== NAV TOP ===== -->
+<nav class="fixed top-0 inset-x-0 z-40 glass border-b border-edge">
+  <div class="max-w-[1600px] mx-auto px-6 h-14 flex items-center justify-between">
+    <div class="flex items-center gap-4">
+      <a href="../index.html" class="text-slate-400 hover:text-yellow-400 text-sm flex items-center gap-1" aria-label="Voltar para o hub">
+        <span>←</span> <span class="hidden sm:inline">Hub</span>
+      </a>
+      <div class="h-6 w-px bg-edge"></div>
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-md bg-yellow-400 text-ink flex items-center justify-center font-bold">A</div>
+        <div>
+          <div class="text-sm font-semibold leading-none">Agentic.Sistema <span class="text-yellow-400">v2</span></div>
+          <div class="text-[10px] text-slate-500 leading-none mt-1">Multi-Agent Runner</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-1 bg-panel rounded-lg p-1 border border-edge">
+      <button id="viewEditorBtn" class="tab-view px-3 py-1.5 text-xs font-medium rounded-md transition" aria-label="Editor">⚙ Editor</button>
+      <button id="viewArenaBtn" class="tab-view px-3 py-1.5 text-xs font-medium rounded-md transition" aria-label="Arena">⚡ Arena</button>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <button id="exportBtn" class="btn-ghost text-xs" aria-label="Exportar JSON">⬇ Export</button>
+      <button id="importBtn" class="btn-ghost text-xs" aria-label="Importar JSON">⬆ Import</button>
+      <input type="file" id="importFile" accept="application/json" class="hidden" />
+      <button id="themeBtn" class="w-8 h-8 rounded-md bg-panel border border-edge text-slate-400 hover:text-yellow-400" aria-label="Tema (decorativo)">🌙</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== DASHBOARD ===== -->
+<section class="pt-20 px-6 max-w-[1600px] mx-auto">
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+    <div class="glass rounded-xl p-4">
+      <div class="text-[11px] uppercase tracking-wider text-slate-500">Agentes</div>
+      <div class="text-2xl font-bold text-yellow-400 mt-1" id="statAgents">0</div>
+    </div>
+    <div class="glass rounded-xl p-4">
+      <div class="text-[11px] uppercase tracking-wider text-slate-500">Mensagens</div>
+      <div class="text-2xl font-bold mt-1" id="statMsgs">0</div>
+    </div>
+    <div class="glass rounded-xl p-4">
+      <div class="text-[11px] uppercase tracking-wider text-slate-500">Custo simulado</div>
+      <div class="text-2xl font-bold mt-1" id="statCost">R$ 0,00</div>
+    </div>
+    <div class="glass rounded-xl p-4">
+      <div class="text-[11px] uppercase tracking-wider text-slate-500">Mais usado</div>
+      <div class="text-lg font-semibold mt-1 truncate" id="statTop">—</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== LAYOUT PRINCIPAL ===== -->
+<main class="px-6 pt-4 pb-24 max-w-[1600px] mx-auto grid grid-cols-12 gap-4 mt-4">
+
+  <!-- ===== SIDEBAR LISTA DE AGENTES ===== -->
+  <aside class="col-span-12 lg:col-span-3">
+    <div class="glass rounded-xl p-3 sticky top-20">
+      <div class="flex items-center justify-between px-2 py-1">
+        <div class="text-xs uppercase tracking-wider text-slate-500">Agentes</div>
+        <button id="newAgentBtn" class="text-yellow-400 hover:text-yellow-300 text-lg leading-none" aria-label="Novo agente">＋</button>
+      </div>
+      <div id="agentList" class="mt-2 space-y-1 max-h-[70vh] overflow-y-auto"></div>
+    </div>
+  </aside>
+
+  <!-- ===== CONTEÚDO CENTRAL ===== -->
+  <section class="col-span-12 lg:col-span-9 min-h-[60vh]">
+
+    <!-- ===== EDITOR VIEW ===== -->
+    <div id="editorView" class="hidden">
+      <div id="editorEmpty" class="glass rounded-xl p-16 text-center">
+        <div class="text-6xl mb-4">🤖</div>
+        <div class="text-lg font-semibold">Nenhum agente selecionado</div>
+        <div class="text-sm text-slate-500 mt-1">Clique num agente da lista ou crie um novo.</div>
+        <button onclick="newAgent()" class="btn mt-6">＋ Criar agente</button>
+      </div>
+
+      <div id="editorPanel" class="hidden">
+        <!-- Header -->
+        <div class="glass rounded-xl p-5 mb-3">
+          <div class="flex items-center gap-3">
+            <input id="ed_emoji" maxlength="2" class="field text-center text-2xl !w-16 !p-2" aria-label="Emoji do agente"/>
+            <input id="ed_name" class="field text-lg font-semibold" placeholder="Nome do agente" aria-label="Nome"/>
+            <select id="ed_color" class="field !w-32" aria-label="Cor">
+              <option value="yellow">🟡 yellow</option>
+              <option value="sky">🔵 sky</option>
+              <option value="emerald">🟢 emerald</option>
+              <option value="rose">🔴 rose</option>
+              <option value="purple">🟣 purple</option>
+              <option value="amber">🟠 amber</option>
+            </select>
+            <button id="previewBtn" class="btn-ghost text-xs">👁 Preview</button>
+            <button id="deleteBtn" class="btn-ghost text-xs hover:!bg-rose-500/20 hover:!text-rose-300">🗑</button>
+          </div>
+          <div class="mt-4 flex items-center gap-3">
+            <div class="text-[11px] uppercase tracking-wider text-slate-500 w-24">Completude</div>
+            <div class="flex-1 score-bar"><div id="scoreFill" class="score-fill" style="width: 0%"></div></div>
+            <div id="scoreText" class="text-xs text-slate-400 w-10 text-right">0%</div>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="glass rounded-xl">
+          <div class="border-b border-edge px-3 flex items-center gap-1 overflow-x-auto">
+            <button class="tab-btn active" data-tab="instr">📜 Instruções</button>
+            <button class="tab-btn" data-tab="know">📚 Conhecimento</button>
+            <button class="tab-btn" data-tab="tools">🛠 Ferramentas</button>
+            <button class="tab-btn" data-tab="intents">🎯 Intents</button>
+            <button class="tab-btn" data-tab="settings">⚙ Settings</button>
+          </div>
+
+          <div class="p-5">
+            <!-- INSTR -->
+            <div data-pane="instr">
+              <label class="text-[11px] uppercase tracking-wider text-slate-500">System prompt / instruções</label>
+              <textarea id="ed_instructions" class="field mt-2" rows="10" placeholder="Você é um agente especialista em..."></textarea>
+            </div>
+            <!-- KNOW -->
+            <div data-pane="know" class="hidden">
+              <label class="text-[11px] uppercase tracking-wider text-slate-500">Conhecimento (uma linha por item: tipo | nome | descrição)</label>
+              <textarea id="ed_knowledge" class="field mt-2" rows="10" placeholder="PDF | Manual | Regras internas&#10;URL | Site | https://..."></textarea>
+            </div>
+            <!-- TOOLS -->
+            <div data-pane="tools" class="hidden">
+              <label class="text-[11px] uppercase tracking-wider text-slate-500">Ferramentas (uma linha: nome(params) — desc)</label>
+              <textarea id="ed_tools" class="field mt-2" rows="10" placeholder="agendar_visita(data, horário) — agenda uma visita no imóvel&#10;buscar_imovel(bairro, faixa) — busca imóveis disponíveis"></textarea>
+            </div>
+            <!-- INTENTS -->
+            <div data-pane="intents" class="hidden">
+              <label class="text-[11px] uppercase tracking-wider text-slate-500">Intents reconhecidos (uma por linha)</label>
+              <textarea id="ed_intents" class="field mt-2" rows="10" placeholder="agendar_visita&#10;buscar_imovel&#10;tirar_duvida"></textarea>
+            </div>
+            <!-- SETTINGS -->
+            <div data-pane="settings" class="hidden grid grid-cols-2 gap-4">
+              <div>
+                <label class="text-[11px] uppercase tracking-wider text-slate-500">Modelo</label>
+                <select id="ed_model" class="field mt-2">
+                  <option>gpt-4o-mini</option>
+                  <option>gpt-4o</option>
+                  <option>claude-3.5-sonnet</option>
+                  <option>claude-3-haiku</option>
+                  <option>gemini-1.5-flash</option>
+                  <option>llama-3.1</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-[11px] uppercase tracking-wider text-slate-500">Contexto (tokens)</label>
+                <input id="ed_context" type="number" class="field mt-2" value="8000"/>
+              </div>
+              <div>
+                <label class="text-[11px] uppercase tracking-wider text-slate-500">Custo / 1K tokens (R$)</label>
+                <input id="ed_cost" type="number" step="0.001" class="field mt-2" value="0.005"/>
+              </div>
+              <div>
+                <label class="text-[11px] uppercase tracking-wider text-slate-500">Campos coletados (csv)</label>
+                <input id="ed_fields" class="field mt-2" placeholder="nome, telefone, email"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-3 text-xs text-slate-500 flex items-center gap-2">
+          <span id="saveStatus" class="text-slate-500">●</span>
+          <span id="saveLabel">Sem mudanças</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ARENA VIEW ===== -->
+    <div id="arenaView">
+      <!-- Controles arena -->
+      <div class="glass rounded-xl p-4 mb-3">
+        <div class="flex items-center justify-between flex-wrap gap-3">
+          <div>
+            <div class="text-sm font-semibold">⚡ Arena Multi-Agente</div>
+            <div class="text-xs text-slate-500 mt-1">Selecione 2-4 agentes, envie uma mensagem, observe em paralelo.</div>
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="flex items-center gap-2 text-xs text-slate-400 cursor-pointer">
+              <input type="checkbox" id="orchToggle" class="accent-yellow-400"/>
+              <span>🔗 Modo Orquestração (sequencial)</span>
+            </label>
+            <button id="clearArenaBtn" class="btn-ghost text-xs">🧹 Limpar</button>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <div class="text-[11px] uppercase tracking-wider text-slate-500 mb-2">Selecionar agentes (2-4)</div>
+          <div id="arenaSelect" class="flex flex-wrap gap-2"></div>
+        </div>
+      </div>
+
+      <!-- Histórico de rounds -->
+      <div id="rounds" class="space-y-6"></div>
+
+      <!-- Empty -->
+      <div id="arenaEmpty" class="glass rounded-xl p-16 text-center">
+        <div class="text-6xl mb-4">⚡</div>
+        <div class="text-lg font-semibold">Arena vazia</div>
+        <div class="text-sm text-slate-500 mt-1">Selecione agentes acima e envie uma mensagem abaixo.</div>
+        <div class="text-xs text-slate-600 mt-4">Atalho: <kbd class="px-1.5 py-0.5 bg-panel2 rounded border border-edge text-slate-400">Cmd/Ctrl + Enter</kbd></div>
+      </div>
+
+      <!-- Input fixo bottom -->
+      <div class="fixed bottom-0 left-0 right-0 z-30 px-6 pb-4 pt-6 pointer-events-none" id="arenaInputWrap">
+        <div class="max-w-[1600px] mx-auto pointer-events-auto">
+          <div class="glass rounded-2xl p-3 flex items-end gap-2 glow-yellow">
+            <textarea id="arenaInput" rows="2" placeholder="Mensagem para os agentes selecionados..."
+              class="field !bg-transparent !border-0 !p-2 resize-none focus:!shadow-none flex-1" aria-label="Mensagem"></textarea>
+            <button id="sendArenaBtn" class="btn whitespace-nowrap" aria-label="Enviar para agentes">⚡ Enviar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</main>
+
+<!-- ===== FAB ===== -->
+<button class="fab" onclick="newAgent()" aria-label="Novo agente">＋</button>
+
+<!-- ===== PREVIEW MODAL ===== -->
+<div id="previewModal" class="hidden fixed inset-0 z-50 modal-bg flex items-center justify-center p-6">
+  <div class="glass rounded-2xl max-w-3xl w-full max-h-[80vh] overflow-hidden flex flex-col">
+    <div class="flex items-center justify-between p-4 border-b border-edge">
+      <div class="text-sm font-semibold">👁 Preview do prompt final</div>
+      <button onclick="closePreview()" class="text-slate-400 hover:text-white text-xl leading-none">×</button>
+    </div>
+    <pre id="previewBody" class="flex-1 overflow-auto p-5 text-xs font-mono text-slate-300 whitespace-pre-wrap"></pre>
+  </div>
+</div>
+
+<script>
+/* ===== STATE ===== */
+const LS_KEY = 'agentic.agents.v2';
+const LS_STATS = 'agentic.stats.v2';
+let agents = [];
+let stats = { msgs: 0, cost: 0, usage: {} };
+let currentView = 'arena'; // 'editor' | 'arena'
+let currentAgentId = null;
+let arenaSelected = new Set();
+let saveTimer = null;
+
+/* ===== UTIL ===== */
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => document.querySelectorAll(s);
+const uid = () => 'a_' + Math.random().toString(36).slice(2, 9);
+const fmtBRL = (n) => 'R$ ' + n.toFixed(2).replace('.', ',');
+const sample = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+/* ===== LOAD / SAVE ===== */
+function load() {
+  try { agents = JSON.parse(localStorage.getItem(LS_KEY)) || []; } catch { agents = []; }
+  try { stats = JSON.parse(localStorage.getItem(LS_STATS)) || stats; } catch {}
+  if (agents.length === 0) seedAgents();
+}
+function persist() {
+  localStorage.setItem(LS_KEY, JSON.stringify(agents));
+  localStorage.setItem(LS_STATS, JSON.stringify(stats));
+  renderDashboard();
+}
+
+/* ===== SEED ===== */
+function seedAgents() {
+  agents = [
+    {
+      id: uid(), name: 'Aura', emoji: '🏠', color: 'yellow',
+      instructions: 'Você é a Aura, especialista em imóveis residenciais. Atende leads com tom acolhedor, qualifica rapidamente e agenda visitas. Nunca invente preços.',
+      knowledge: 'PDF | Catálogo | Imóveis disponíveis atualizado semanalmente\nURL | Site | https://imobiliaria.exemplo.com\nFAQ | Dúvidas | Perguntas frequentes sobre financiamento',
+      tools: 'buscar_imovel(bairro, faixa_preco) — busca imóveis na base\nagendar_visita(imovel_id, data, horario) — agenda visita com corretor\nsimular_financiamento(valor, entrada, prazo) — simula parcelas',
+      intents: 'buscar_imovel\nagendar_visita\nfinanciamento\nlocacao',
+      model: 'gpt-4o-mini', context: 8000, cost: 0.005,
+      fields: 'nome, telefone, bairro_desejado, faixa_preco'
+    },
+    {
+      id: uid(), name: 'Lex', emoji: '⚖️', color: 'sky',
+      instructions: 'Você é Lex, assistente jurídico. Responde dúvidas de direito civil e trabalhista com linguagem clara. Sempre alerta que não substitui advogado.',
+      knowledge: 'PDF | CLT | Consolidação das Leis do Trabalho\nPDF | Código Civil | Lei 10.406/2002\nURL | JusBrasil | https://jusbrasil.com.br',
+      tools: 'buscar_jurisprudencia(termo) — busca decisões similares\ncalcular_rescisao(salario, tempo_servico, tipo) — calcula verbas\nagendar_consulta(area, data) — agenda com advogado parceiro',
+      intents: 'duvida_trabalhista\nduvida_civil\ncalculo_rescisao\nagendar',
+      model: 'claude-3.5-sonnet', context: 16000, cost: 0.015,
+      fields: 'nome, email, area_juridica, urgencia'
+    },
+    {
+      id: uid(), name: 'Nova', emoji: '🛟', color: 'emerald',
+      instructions: 'Você é Nova, suporte do SaaS Foobar. Resolve tickets simples na hora, escalona o resto. Tom amigável, objetivo, sem jargão.',
+      knowledge: 'URL | Docs | https://docs.foobar.com\nFAQ | Top issues | 30 perguntas mais comuns\nAPI | Status | https://status.foobar.com',
+      tools: 'consultar_ticket(id) — busca status do ticket\ncriar_ticket(assunto, descricao, prioridade) — abre novo ticket\nresetar_senha(email) — dispara link de reset',
+      intents: 'reset_senha\nconsulta_status\nbug_report\nupgrade_plano',
+      model: 'gpt-4o-mini', context: 8000, cost: 0.005,
+      fields: 'email, plano, descricao_problema'
+    }
+  ];
+  persist();
+}
+
+/* ===== DASHBOARD ===== */
+function renderDashboard() {
+  $('#statAgents').textContent = agents.length;
+  $('#statMsgs').textContent = stats.msgs;
+  $('#statCost').textContent = fmtBRL(stats.cost);
+  const top = Object.entries(stats.usage).sort((a,b) => b[1]-a[1])[0];
+  $('#statTop').textContent = top ? (agents.find(a=>a.id===top[0])?.emoji + ' ' + (agents.find(a=>a.id===top[0])?.name || '—')) : '—';
+}
+
+/* ===== AGENT LIST ===== */
+function renderAgentList() {
+  const list = $('#agentList');
+  if (agents.length === 0) {
+    list.innerHTML = `<div class="px-3 py-8 text-center text-xs text-slate-600">Sem agentes ainda.<br/>Clique em ＋</div>`;
+    return;
+  }
+  list.innerHTML = agents.map(a => `
+    <button onclick="selectAgent('${a.id}')"
+      class="w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-2.5 transition agent-${a.color}
+      ${currentAgentId === a.id && currentView === 'editor' ? 'bg-panel2 border border-edge' : 'hover:bg-panel2/60'}">
+      <span class="text-lg">${a.emoji || '🤖'}</span>
+      <div class="flex-1 min-w-0">
+        <div class="text-sm font-medium truncate">${escapeHtml(a.name) || 'Sem nome'}</div>
+        <div class="text-[10px] text-slate-500 truncate">${a.model}</div>
+      </div>
+      <div class="w-1.5 h-1.5 rounded-full agent-dot"></div>
+    </button>
+  `).join('');
+}
+
+/* ===== EDITOR ===== */
+function selectAgent(id) {
+  currentAgentId = id;
+  setView('editor');
+  const a = agents.find(x => x.id === id);
+  if (!a) return;
+  $('#editorEmpty').classList.add('hidden');
+  $('#editorPanel').classList.remove('hidden');
+  $('#ed_emoji').value = a.emoji || '';
+  $('#ed_name').value = a.name || '';
+  $('#ed_color').value = a.color || 'yellow';
+  $('#ed_instructions').value = a.instructions || '';
+  $('#ed_knowledge').value = a.knowledge || '';
+  $('#ed_tools').value = a.tools || '';
+  $('#ed_intents').value = a.intents || '';
+  $('#ed_model').value = a.model || 'gpt-4o-mini';
+  $('#ed_context').value = a.context || 8000;
+  $('#ed_cost').value = a.cost || 0.005;
+  $('#ed_fields').value = a.fields || '';
+  updateScore();
+  renderAgentList();
+  // reset tabs
+  $$('.tab-btn').forEach(b => b.classList.remove('active'));
+  $$('[data-pane]').forEach(p => p.classList.add('hidden'));
+  $('[data-tab="instr"]').classList.add('active');
+  $('[data-pane="instr"]').classList.remove('hidden');
+}
+
+function newAgent() {
+  const a = {
+    id: uid(), name: 'Novo agente', emoji: '🤖', color: 'yellow',
+    instructions: '', knowledge: '', tools: '', intents: '',
+    model: 'gpt-4o-mini', context: 8000, cost: 0.005, fields: ''
+  };
+  agents.push(a);
+  persist();
+  renderAgentList();
+  selectAgent(a.id);
+  renderArenaSelect();
+}
+
+function deleteCurrent() {
+  if (!currentAgentId) return;
+  if (!confirm('Excluir este agente?')) return;
+  agents = agents.filter(a => a.id !== currentAgentId);
+  currentAgentId = null;
+  $('#editorEmpty').classList.remove('hidden');
+  $('#editorPanel').classList.add('hidden');
+  persist();
+  renderAgentList();
+  renderArenaSelect();
+}
+
+function readFormToAgent() {
+  const a = agents.find(x => x.id === currentAgentId);
+  if (!a) return;
+  a.emoji = $('#ed_emoji').value;
+  a.name = $('#ed_name').value;
+  a.color = $('#ed_color').value;
+  a.instructions = $('#ed_instructions').value;
+  a.knowledge = $('#ed_knowledge').value;
+  a.tools = $('#ed_tools').value;
+  a.intents = $('#ed_intents').value;
+  a.model = $('#ed_model').value;
+  a.context = +$('#ed_context').value || 0;
+  a.cost = +$('#ed_cost').value || 0;
+  a.fields = $('#ed_fields').value;
+  updateScore();
+  renderAgentList();
+  renderArenaSelect();
+}
+
+function debouncedSave() {
+  $('#saveStatus').className = 'text-yellow-400';
+  $('#saveLabel').textContent = 'Salvando...';
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    readFormToAgent();
+    persist();
+    $('#saveStatus').className = 'text-emerald-400';
+    $('#saveLabel').textContent = 'Salvo ' + new Date().toLocaleTimeString();
+  }, 600);
+}
+
+function updateScore() {
+  const a = agents.find(x => x.id === currentAgentId);
+  if (!a) return;
+  let score = 0;
+  if (a.name?.trim()) score += 10;
+  if (a.emoji?.trim()) score += 5;
+  if ((a.instructions || '').length > 40) score += 25;
+  if ((a.knowledge || '').split('\n').filter(l => l.trim()).length >= 2) score += 15;
+  if ((a.tools || '').split('\n').filter(l => l.trim()).length >= 1) score += 20;
+  if ((a.intents || '').split('\n').filter(l => l.trim()).length >= 2) score += 15;
+  if (a.fields?.trim()) score += 10;
+  $('#scoreFill').style.width = score + '%';
+  $('#scoreText').textContent = score + '%';
+}
+
+/* ===== PREVIEW ===== */
+function openPreview() {
+  const a = agents.find(x => x.id === currentAgentId);
+  if (!a) return;
+  const prompt = buildSystemPrompt(a);
+  $('#previewBody').textContent = prompt;
+  $('#previewModal').classList.remove('hidden');
+}
+function closePreview() { $('#previewModal').classList.add('hidden'); }
+
+function buildSystemPrompt(a) {
+  return `# AGENTE: ${a.emoji} ${a.name}
+# Modelo: ${a.model} • Contexto: ${a.context} tokens • Custo: ${fmtBRL(a.cost)}/1K
+
+## INSTRUÇÕES
+${a.instructions || '(vazio)'}
+
+## CONHECIMENTO
+${a.knowledge || '(vazio)'}
+
+## FERRAMENTAS
+${a.tools || '(vazio)'}
+
+## INTENTS RECONHECIDOS
+${a.intents || '(vazio)'}
+
+## CAMPOS COLETADOS
+${a.fields || '(vazio)'}
+`;
+}
+
+/* ===== VIEW SWITCH ===== */
+function setView(v) {
+  currentView = v;
+  $('#editorView').classList.toggle('hidden', v !== 'editor');
+  $('#arenaView').classList.toggle('hidden', v !== 'arena');
+  $('#viewEditorBtn').classList.toggle('bg-yellow-400/15', v === 'editor');
+  $('#viewEditorBtn').classList.toggle('text-yellow-400', v === 'editor');
+  $('#viewArenaBtn').classList.toggle('bg-yellow-400/15', v === 'arena');
+  $('#viewArenaBtn').classList.toggle('text-yellow-400', v === 'arena');
+  renderAgentList();
+}
+
+/* ===== ARENA ===== */
+function renderArenaSelect() {
+  const cont = $('#arenaSelect');
+  if (agents.length === 0) {
+    cont.innerHTML = `<div class="text-xs text-slate-500">Crie agentes primeiro.</div>`;
+    return;
+  }
+  cont.innerHTML = agents.map(a => {
+    const checked = arenaSelected.has(a.id);
+    return `
+      <label class="cursor-pointer agent-${a.color} px-3 py-2 rounded-lg flex items-center gap-2 border transition
+        ${checked ? 'bg-panel2 border-edge glow-yellow' : 'bg-panel/60 border-edge hover:border-slate-600'}">
+        <input type="checkbox" ${checked ? 'checked' : ''} onchange="toggleArena('${a.id}')" class="accent-yellow-400"/>
+        <span>${a.emoji}</span>
+        <span class="text-xs font-medium">${escapeHtml(a.name)}</span>
+        <span class="w-1.5 h-1.5 rounded-full agent-dot"></span>
+      </label>
+    `;
+  }).join('');
+}
+
+function toggleArena(id) {
+  if (arenaSelected.has(id)) arenaSelected.delete(id);
+  else {
+    if (arenaSelected.size >= 4) {
+      alert('Máximo 4 agentes simultâneos na arena.');
+      renderArenaSelect();
+      return;
+    }
+    arenaSelected.add(id);
+  }
+  renderArenaSelect();
+}
+
+/* ===== SIMULATION ENGINE ===== */
+const REPLY_TEMPLATES = [
+  (a, q) => `Como ${a.emoji} **${a.name}**, baseado nas minhas instruções: ${truncate(firstSentence(a.instructions), 140)} — me conta mais sobre **${extractNoun(q)}**?`,
+  (a, q) => `Entendi sua mensagem. Pelo que vi, parece relacionado a **${extractNoun(q)}**. Posso te ajudar dentro do meu escopo (${a.intents.split('\n')[0] || 'geral'}). O que você precisa exatamente?`,
+  (a, q) => `Boa pergunta. Pelo meu prompt, eu foco em: "${truncate(firstSentence(a.instructions), 100)}". Quer que eu te encaminhe para **${extractNoun(q)}** ou prefere outra coisa?`,
+  (a, q) => `Recebi: "${truncate(q, 70)}". Minha base de conhecimento tem ${(a.knowledge||'').split('\n').filter(Boolean).length} fontes relevantes. Posso aprofundar em **${extractNoun(q)}**.`,
+];
+
+function pickTool(agent, message) {
+  const tools = (agent.tools || '').split('\n').map(l => l.trim()).filter(Boolean);
+  for (const line of tools) {
+    const name = line.split('(')[0].trim();
+    if (!name) continue;
+    const keyword = name.split('_').join('|');
+    const re = new RegExp(`\\b(${keyword})\\b`, 'i');
+    if (re.test(message)) return { name, line };
+    // also match if message contains any token from tool name
+    const tokens = name.split('_');
+    if (tokens.some(t => t.length > 3 && new RegExp(`\\b${t}`, 'i').test(message))) {
+      return { name, line };
+    }
+  }
+  return null;
+}
+
+function generateResponse(agent, message) {
+  const tool = pickTool(agent, message);
+  if (tool) {
+    return {
+      thought: `Identifiquei intent compatível com a ferramenta \`${tool.name}\`. Vou invocá-la com os parâmetros extraídos.`,
+      reply: `🔧 Vou usar **\`${tool.name}(...)\`**.\n\nParâmetros inferidos a partir de "${truncate(message, 60)}".\n\n**Resultado simulado:** Operação executada com sucesso. Retornei dados mockados que seriam consumidos pelo próximo turno.`
+    };
+  }
+  return {
+    thought: `Nenhuma tool matchou diretamente. Vou responder com base nas instruções e pedir contexto.`,
+    reply: sample(REPLY_TEMPLATES)(agent, message)
+  };
+}
+
+function firstSentence(t) { return (t || '').split(/[.!?]/)[0].trim() || 'sem instruções definidas'; }
+function truncate(t, n) { t = t || ''; return t.length > n ? t.slice(0, n - 1) + '…' : t; }
+function extractNoun(msg) {
+  const stop = new Set(['a','o','e','de','da','do','um','uma','para','com','que','meu','minha','sua','seu','isso','quero','preciso','como','onde','quando','por','quê','que']);
+  const w = (msg || '').toLowerCase().match(/[a-záéíóúãõçâêô]{4,}/gi) || [];
+  const cand = w.find(x => !stop.has(x.toLowerCase()));
+  return cand || 'isso';
+}
+
+function escapeHtml(s) {
+  return (s || '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+/* ===== ARENA RUN ===== */
+async function sendArenaMessage() {
+  const msg = $('#arenaInput').value.trim();
+  if (!msg) return;
+  if (arenaSelected.size < 2) {
+    alert('Selecione ao menos 2 agentes.');
+    return;
+  }
+  $('#arenaInput').value = '';
+  $('#arenaEmpty').classList.add('hidden');
+
+  const selectedAgents = [...arenaSelected].map(id => agents.find(a => a.id === id)).filter(Boolean);
+  const orch = $('#orchToggle').checked;
+
+  // Cria round
+  const round = document.createElement('div');
+  round.className = 'glass rounded-2xl p-4 fade-in';
+  const roundIdx = $$('#rounds > div').length + 1;
+  round.innerHTML = `
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-[11px] uppercase tracking-wider text-slate-500">Round ${roundIdx} ${orch ? '• 🔗 Orquestração' : '• ⚡ Paralelo'}</div>
+      <div class="text-xs text-slate-500">${new Date().toLocaleTimeString()}</div>
+    </div>
+    <div class="mb-4 px-4 py-3 bg-panel rounded-lg border border-edge">
+      <div class="text-[10px] uppercase text-slate-500 mb-1">👤 Você</div>
+      <div class="text-sm">${escapeHtml(msg)}</div>
+    </div>
+    <div class="${orch ? 'flex items-stretch gap-2 overflow-x-auto pb-2' : `grid gap-3 grid-cols-1 md:grid-cols-${Math.min(selectedAgents.length, 2)} ${selectedAgents.length >= 3 ? 'xl:grid-cols-' + Math.min(selectedAgents.length, 4) : ''}`}" id="rd-${roundIdx}"></div>
+  `;
+  $('#rounds').prepend(round);
+  const slot = round.querySelector(`#rd-${roundIdx}`);
+
+  if (orch) {
+    let pipeMsg = msg;
+    for (let i = 0; i < selectedAgents.length; i++) {
+      const a = selectedAgents[i];
+      const card = createAgentCard(a);
+      slot.appendChild(card);
+      if (i < selectedAgents.length - 1) {
+        const arrow = document.createElement('div');
+        arrow.className = 'flex items-center justify-center px-2';
+        arrow.innerHTML = `<div class="pipe-arrow"></div>`;
+        slot.appendChild(arrow);
+      }
+      const result = await runAgentInCard(a, pipeMsg, card);
+      pipeMsg = result; // output vira input próximo
+    }
+  } else {
+    // paralelo
+    const tasks = selectedAgents.map(a => {
+      const card = createAgentCard(a);
+      slot.appendChild(card);
+      return runAgentInCard(a, msg, card);
+    });
+    await Promise.all(tasks);
+  }
+
+  stats.msgs += 1;
+  persist();
+}
+
+function createAgentCard(a) {
+  const card = document.createElement('div');
+  card.className = `agent-card agent-${a.color} rounded-xl p-3 ${$('#orchToggle').checked ? 'min-w-[280px] flex-shrink-0 w-72' : ''} fade-in`;
+  card.innerHTML = `
+    <div class="flex items-center gap-2 mb-3">
+      <div class="text-xl">${a.emoji}</div>
+      <div class="flex-1 min-w-0">
+        <div class="text-sm font-semibold truncate agent-text">${escapeHtml(a.name)}</div>
+        <div class="text-[10px] text-slate-500 truncate">${a.model}</div>
+      </div>
+      <div class="w-2 h-2 rounded-full agent-dot think-pulse" data-pulse></div>
+    </div>
+    <div class="thinking text-[11px] text-slate-500 italic mb-2 think-pulse">🧠 Pensando...</div>
+    <div class="reply text-sm text-slate-200 whitespace-pre-wrap leading-relaxed min-h-[40px]"></div>
+    <div class="footer mt-3 pt-2 border-t border-edge flex items-center justify-between text-[10px] text-slate-500">
+      <span class="time">⏱ —</span>
+      <span class="cost">💰 —</span>
+    </div>
+  `;
+  return card;
+}
+
+async function runAgentInCard(a, message, card) {
+  const t0 = performance.now();
+  const result = generateResponse(a, message);
+
+  // Thinking phase
+  card.querySelector('.thinking').textContent = '🧠 ' + result.thought;
+  await sleep(400 + Math.random() * 600);
+
+  // Typing reply
+  const replyEl = card.querySelector('.reply');
+  replyEl.classList.add('typing');
+  card.querySelector('.thinking').classList.remove('think-pulse');
+  card.querySelector('[data-pulse]').classList.remove('think-pulse');
+
+  const text = result.reply;
+  for (let i = 0; i < text.length; i++) {
+    replyEl.textContent += text[i];
+    if (i % 3 === 0) await sleep(25);
+  }
+  replyEl.classList.remove('typing');
+  // render markdown bold inline
+  replyEl.innerHTML = renderMd(text);
+
+  const elapsed = Math.round(performance.now() - t0);
+  const tokens = Math.ceil(text.length / 4);
+  const cost = (tokens / 1000) * (a.cost || 0.005);
+  card.querySelector('.time').textContent = `⏱ ${elapsed}ms • ${tokens} tok`;
+  card.querySelector('.cost').textContent = `💰 ${fmtBRL(cost)}`;
+
+  stats.cost += cost;
+  stats.usage[a.id] = (stats.usage[a.id] || 0) + 1;
+  return text;
+}
+
+function renderMd(t) {
+  return escapeHtml(t)
+    .replace(/\*\*(.+?)\*\*/g, '<strong class="text-yellow-300">$1</strong>')
+    .replace(/`([^`]+)`/g, '<code class="px-1 py-0.5 bg-black/40 rounded text-yellow-400 text-[12px] font-mono">$1</code>')
+    .replace(/\n/g, '<br/>');
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+/* ===== EXPORT / IMPORT ===== */
+function exportJson() {
+  const blob = new Blob([JSON.stringify({ agents, stats }, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `agentic-v2-${Date.now()}.json`;
+  a.click();
+}
+function importJson(file) {
+  const r = new FileReader();
+  r.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (Array.isArray(data.agents)) agents = data.agents;
+      if (data.stats) stats = data.stats;
+      persist();
+      renderAgentList();
+      renderArenaSelect();
+      alert('Importado!');
+    } catch (e) { alert('JSON inválido.'); }
+  };
+  r.readAsText(file);
+}
+
+/* ===== BINDINGS ===== */
+function bind() {
+  // view switch
+  $('#viewEditorBtn').onclick = () => setView('editor');
+  $('#viewArenaBtn').onclick = () => setView('arena');
+  $('#newAgentBtn').onclick = newAgent;
+  $('#deleteBtn').onclick = deleteCurrent;
+  $('#previewBtn').onclick = openPreview;
+  $('#previewModal').onclick = (e) => { if (e.target.id === 'previewModal') closePreview(); };
+
+  // tabs
+  $$('.tab-btn').forEach(b => b.onclick = () => {
+    $$('.tab-btn').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    const t = b.dataset.tab;
+    $$('[data-pane]').forEach(p => p.classList.toggle('hidden', p.dataset.pane !== t));
+  });
+
+  // autosave fields
+  ['ed_emoji','ed_name','ed_color','ed_instructions','ed_knowledge','ed_tools','ed_intents','ed_model','ed_context','ed_cost','ed_fields']
+    .forEach(id => $('#' + id).addEventListener('input', debouncedSave));
+
+  // arena
+  $('#sendArenaBtn').onclick = sendArenaMessage;
+  $('#clearArenaBtn').onclick = () => { $('#rounds').innerHTML = ''; $('#arenaEmpty').classList.remove('hidden'); };
+  $('#arenaInput').addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); sendArenaMessage(); }
+  });
+
+  // export / import
+  $('#exportBtn').onclick = exportJson;
+  $('#importBtn').onclick = () => $('#importFile').click();
+  $('#importFile').onchange = (e) => e.target.files[0] && importJson(e.target.files[0]);
+
+  // theme btn — apenas decorativo
+  $('#themeBtn').onclick = () => {
+    $('#themeBtn').textContent = $('#themeBtn').textContent === '🌙' ? '✨' : '🌙';
+  };
+}
+
+/* ===== INIT ===== */
+function init() {
+  load();
+  bind();
+  renderAgentList();
+  renderArenaSelect();
+  renderDashboard();
+  setView('arena');
+  // pré-seleciona os 2 primeiros agentes
+  agents.slice(0, 2).forEach(a => arenaSelected.add(a.id));
+  renderArenaSelect();
+}
+init();
+</script>
+</body>
+</html>

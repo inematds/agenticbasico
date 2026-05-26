@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 1.2 — Os 5 pilares | Agentic AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { darkMode: 'class', theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } } }</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5,150,105,0.12); }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5,150,105,0.25); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37,99,235,0.25); }
+    html:not(.dark) .text-red-400 { color: #b91c1c; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(185,28,28,0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(185,28,28,0.25); }
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161,98,7,0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255,255,255,0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300"><span class="text-2xl">🤖</span><span class="font-bold text-lg hidden sm:inline">Agentic AI</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-neutral-100 hover:bg-dark-700 transition-colors"><span class="sm:hidden">Início</span><span class="hidden sm:inline">Início</span></a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-emerald-400 bg-emerald-500/10"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Anatomia</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Construção</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Operação</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../index.html" class="hover:text-emerald-400">Início</a><span>/</span>
+      <a href="index.html" class="hover:text-emerald-400">Trilha 1</a><span>/</span>
+      <span class="text-emerald-400">Módulo 1.2</span>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-full mb-4">MÓDULO 1.2</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🏛️ Os 5 pilares</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">Prompt, conhecimento, ferramentas, intents não resolvidos e settings. Cinco peças que sustentam qualquer agente sério. Quem cobre os cinco entrega; quem pula um, refaz em seis semanas.</p>
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">50</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">Básico</div><div class="text-xs text-neutral-400">Nível</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">Teoria</div><div class="text-xs text-neutral-400">Tipo</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <h2 class="text-2xl font-bold mb-6">Conteúdo detalhado</h2>
+
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">1</span><h2 class="text-2xl font-bold">📝 Pilar 1 — Instruções (system prompt)</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">O system prompt é a <strong class="text-emerald-400">constituição</strong> do agente. Define quem ele é, como fala, o que pode e o que nunca faz. É o pilar mais barato de ajustar e o que resolve 90% dos problemas de qualidade.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6 font-mono text-sm">
+        <div class="text-neutral-400 mb-3">// Estrutura recomendada de system prompt</div>
+        <pre class="text-neutral-300 whitespace-pre-wrap"># Identidade
+Você é Sofia, corretora digital da Imobiliária Vivenda.
+Tom: profissional, empático, direto. Português brasileiro.
+
+# Missão
+Ajudar o cliente a encontrar imóvel e agendar visita.
+
+# Regras invioláveis
+- Nunca dê preço sem consultar a tool buscar_imoveis.
+- Nunca prometa desconto.
+- Sempre confirme número de pessoas antes de agendar visita.
+
+# Ferramentas disponíveis
+- buscar_imoveis, detalhar_imovel, listar_slots, agendar_visita
+
+# Formato de resposta
+- Até 3 frases por mensagem
+- Use bullets quando listar opções (máx 3 itens)</pre>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Dica</h3>
+        <p class="text-neutral-300">Modelos prestam mais atenção no <strong>começo</strong> e no <strong>fim</strong> do prompt. Coloque identidade e missão no topo; regras críticas e formato no rodapé. O meio é onde a atenção mais cai.</p>
+      </div>
+    </section>
+
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">2</span><h2 class="text-2xl font-bold">📚 Pilar 2 — Conhecimento</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">O LLM sabe muito sobre o mundo e <strong class="text-red-400">nada</strong> sobre seu negócio. Conhecimento é como você preenche essa lacuna: FAQs, páginas de produto, políticas, CSVs, base interna.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+          <h4 class="font-bold text-emerald-400 mb-4">✓ Boas fontes</h4>
+          <ul class="space-y-3 text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>FAQ curado pelo time de suporte</span></li>
+            <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Política oficial (devolução, garantia)</span></li>
+            <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Catálogo estruturado (CSV/SQL)</span></li>
+            <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Documentação técnica recente</span></li>
+          </ul>
+        </div>
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+          <h4 class="font-bold text-red-400 mb-4">✗ Fontes ruins</h4>
+          <ul class="space-y-3 text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Site institucional cheio de marketing</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>PDFs digitalizados (OCR ruim)</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>"Tudo do Confluence" sem filtro</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Versão antiga da política</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">🔬</span> Lembre</h3>
+        <p class="text-neutral-300">Quantidade de conteúdo não é qualidade. 50 FAQs limpas batem 5 mil páginas de site marketês. Curato sempre que possível.</p>
+      </div>
+    </section>
+
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">3</span><h2 class="text-2xl font-bold">🔧 Pilar 3 — Ferramentas</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Tools são o que separa <em>conversa</em> de <em>produto</em>. Cada tool é uma capacidade atômica: <code class="text-emerald-400">buscar_imoveis()</code>, <code class="text-emerald-400">agendar_visita()</code>, <code class="text-emerald-400">enviar_whatsapp()</code>. O modelo decide qual chamar com base no contexto.</p>
+
+      <div class="space-y-6 mb-6">
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center"><span class="text-emerald-400 font-bold">1</span></div>
+          <div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+            <h4 class="font-semibold mb-2">Atômica</h4>
+            <p class="text-sm text-neutral-300">Uma tool = uma ação. Não crie <code>fazer_tudo()</code>. Crie tools pequenas e componíveis.</p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center"><span class="text-emerald-400 font-bold">2</span></div>
+          <div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+            <h4 class="font-semibold mb-2">Descrita</h4>
+            <p class="text-sm text-neutral-300">Description é o que o modelo lê para decidir chamar. Escreva como se fosse para outro humano programador.</p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center"><span class="text-emerald-400 font-bold">3</span></div>
+          <div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+            <h4 class="font-semibold mb-2">Tipada</h4>
+            <p class="text-sm text-neutral-300">Schema JSON com required fields. O modelo respeita o contrato; sem schema, ele inventa parâmetros.</p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center"><span class="text-emerald-400 font-bold">4</span></div>
+          <div class="flex-1 bg-dark-800 rounded-xl p-5 border border-dark-600">
+            <h4 class="font-semibold mb-2">Idempotente quando der</h4>
+            <p class="text-sm text-neutral-300">Chamar 2x deve ter o mesmo efeito de chamar 1x. Evita duplicar agendamento por retry.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">4</span><h2 class="text-2xl font-bold">❓ Pilar 4 — Intents não resolvidos</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Toda vez que o bot diz "não sei" ou escala para humano, ele está gritando: <em>"Aqui falta uma feature."</em> Intents não resolvidos são o <strong class="text-emerald-400">roadmap mais honesto</strong> que seu produto vai ter.</p>
+
+      <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center"><span class="mr-2">🔄</span> Ciclo virtuoso</h3>
+        <ol class="space-y-3 text-neutral-300 list-decimal list-inside">
+          <li>Bot acionou fallback → log estruturado</li>
+          <li>Clusteriza por similaridade semântica</li>
+          <li>Cluster com volume alto → entra no backlog</li>
+          <li>Decisão: nova tool ou novo conteúdo na base</li>
+          <li>Mede % de fallback no cluster: cai → ok; sobe → revisar</li>
+        </ol>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Dica de produto</h3>
+        <p class="text-neutral-300">Se 30% das dúvidas batem em "aceita Pix?", a feature óbvia não é uma FAQ — é uma tool <code>verificar_meios_de_pagamento()</code> que devolve a lista atual, mesmo quando muda.</p>
+      </div>
+    </section>
+
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">5</span><h2 class="text-2xl font-bold">⚙️ Pilar 5 — Settings</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Settings são as <strong class="text-emerald-400">alavancas operacionais</strong>: que modelo usar, quanto contexto, qual o teto de custo, quais custom fields entram no prompt. Settings ruins fazem agente bom parecer ruim — e custar caro.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5"><div class="text-lg font-bold text-emerald-400 mb-1">Modelo</div><p class="text-sm text-neutral-400">gpt-4o, claude-sonnet, gemini-flash. Depende da tarefa.</p></div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5"><div class="text-lg font-bold text-blue-400">Temperatura</div><p class="text-sm text-neutral-400">0.0–0.3 para suporte/jurídico, 0.5–0.7 para criativo.</p></div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5"><div class="text-lg font-bold text-purple-400">Max tokens</div><p class="text-sm text-neutral-400">Cap por resposta. Evita verbosidade cara.</p></div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5"><div class="text-lg font-bold text-primary">Custom fields</div><p class="text-sm text-neutral-400">{{nome}}, {{cidade}}, {{lead_score}} — contexto vivo.</p></div>
+      </div>
+    </section>
+
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">6</span><h2 class="text-2xl font-bold">🧩 Como os pilares conversam</h2></div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Ver os 5 pilares isolados é fácil. O segredo está em ver como eles <strong class="text-emerald-400">orquestram</strong> em cada turno. Sem visão integrada, você "conserta" um pilar quando o erro está em outro.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6 font-mono text-sm">
+        <pre class="text-neutral-300 whitespace-pre-wrap">[Settings] modelo=claude-sonnet, temp=0.2, custom_fields={nome:"Marina",lead_score:87}
+        ↓
+[Prompt] System + custom fields aplicados
+        ↓
+[Mensagem do usuário] "Tem 2 quartos na Vila Mariana?"
+        ↓
+[Reasoning] Preciso de dado dinâmico → chamar buscar_imoveis
+        ↓
+[Tool] buscar_imoveis(cidade="SP", bairro="Vila Mariana", quartos=2)
+        ↓
+[Knowledge] Política de visitas consultada via RAG
+        ↓
+[Resposta] "Marina, achei 3 opções. Quer ver os detalhes?"
+        ↓
+[Log] Intent="busca_imovel" resolved=true</pre>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center"><span class="mr-2">🐞</span> Debug por camada</h3>
+        <p class="text-neutral-300">Resposta ruim? Pergunte na ordem: 1) custom fields chegaram certos? 2) tool foi escolhida certa? 3) tool retornou dado certo? 4) prompt tem regra que cobre o caso? 5) modelo é forte o suficiente? <strong>Diagnosticar na camada errada = perder horas.</strong></p>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-emerald-900/40 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">📌</span> Resumo do módulo</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-neutral-100">5 pilares</strong><span class="text-neutral-400"> — prompt, conhecimento, tools, intents, settings</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-neutral-100">Prompt resolve 90% da qualidade</strong><span class="text-neutral-400"> — primacy + recency importam</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-neutral-100">Conhecimento curado &gt; conhecimento volumoso</strong><span class="text-neutral-400"> — qualidade da fonte é tudo</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-neutral-100">Tools atômicas, descritas, tipadas e idempotentes</strong><span class="text-neutral-400"> — a quádrupla mínima</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-neutral-100">Intents não resolvidos = roadmap</strong><span class="text-neutral-400"> — fallback é sinal de mercado</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-neutral-100">Debug por camada</strong><span class="text-neutral-400"> — pergunte na ordem certa</span></div></div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-emerald-400 mb-2">Próximo módulo:</h3>
+          <p class="text-neutral-300">1.3 — 🔁 Loop ReAct: ouvir, pensar, agir</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-1-1.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Módulo anterior</a>
+          <a href="modulo-1-3.html" class="flex-1 text-center px-6 py-3 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-500 transition-colors">Próximo Módulo →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>Agentic AI — Módulo 1.2 • <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p></div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+    if (localStorage.getItem('theme') === 'light') { html.classList.remove('dark'); themeToggleDarkIcon.classList.remove('hidden'); } else { themeToggleLightIcon.classList.remove('hidden'); }
+    themeToggle.addEventListener('click', () => { themeToggleDarkIcon.classList.toggle('hidden'); themeToggleLightIcon.classList.toggle('hidden'); html.classList.toggle('dark'); localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light'); });
+  </script>
+</body>
+</html>
