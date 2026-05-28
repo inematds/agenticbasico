@@ -22,3 +22,12 @@ Curso rápido e visual sobre **agentes de IA agentic** + sistema para criar e ro
 ## Stack
 
 HTML + Tailwind CDN + JS vanilla. Tudo client-side, dados em localStorage.
+
+## Referências de arquitetura
+
+Diagramas e conceitos de arquitetura agêntica usados como referência:
+
+- **AIOS — LLM Agent Operating System** (AGI Research / Rutgers)
+  - Repo: https://github.com/agiresearch/AIOS
+  - SDK Cerebrum: https://github.com/agiresearch/Cerebrum
+  - Paper: https://arxiv.org/abs/2403.16971
