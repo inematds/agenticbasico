@@ -31,3 +31,11 @@ Diagramas e conceitos de arquitetura agêntica usados como referência:
   - Repo: https://github.com/agiresearch/AIOS
   - SDK Cerebrum: https://github.com/agiresearch/Cerebrum
   - Paper: https://arxiv.org/abs/2403.16971
+
+<!-- inema-backlink:v1 -->
+## Mais no INEMA.CLUB
+
+- [Ficha completa deste curso](https://www.inema.club/cursos/121-agentic-basico/)
+- [Guia: como aprender inteligência artificial](https://www.inema.club/aprender-inteligencia-artificial/)
+- [Todos os cursos](https://www.inema.club/cursos/)
+<!-- /inema-backlink:v1 -->
